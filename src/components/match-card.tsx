@@ -9,8 +9,8 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
   if (!main) return null;
 
   return (
-    <article className="border-b border-border bg-card px-3 py-3 last:border-b-0">
-      <div className="mb-2 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+    <article className="group border-b border-border bg-card px-4 py-4 transition-colors last:border-b-0 hover:bg-muted/30">
+      <div className="mb-2.5 flex items-center gap-2 text-[10px] font-semibold text-muted-foreground">
         {match.live ? (
           <span className="inline-flex items-center gap-1 rounded bg-live px-1.5 py-0.5 text-live-foreground">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-live-foreground" />
@@ -19,7 +19,7 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
         ) : (
           <span className="rounded bg-muted px-1.5 py-0.5 text-muted-foreground">{match.startsAt}</span>
         )}
-        <span className="ml-auto opacity-70">{main.name}</span>
+          <span className="ml-auto font-medium opacity-80">{main.name}</span>
       </div>
 
       <Link
@@ -29,14 +29,14 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
       >
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <p className="truncate text-sm font-semibold">{match.home}</p>
+            <p className="truncate text-sm font-semibold text-card-foreground">{match.home}</p>
             {match.live && <span className="text-sm font-bold tabular-nums">{match.live.homeScore}</span>}
           </div>
           <div className="flex items-center justify-between gap-2">
-            <p className="truncate text-sm font-semibold">{match.away}</p>
+            <p className="truncate text-sm font-semibold text-card-foreground">{match.away}</p>
             {match.live && <span className="text-sm font-bold tabular-nums">{match.live.awayScore}</span>}
           </div>
-          <p className="mt-1 truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+          <p className="mt-1.5 truncate text-[10px] font-medium text-muted-foreground">
             {flagFor(match.country)} {match.country} · {match.league}
           </p>
         </div>
@@ -64,10 +64,10 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
                     odds: o.odds,
                   })
                 }
-                className={`flex h-11 flex-col items-center justify-center rounded-md text-sm font-bold tabular-nums transition-colors ${
+                className={`flex h-12 flex-col items-center justify-center rounded-md border text-sm font-bold tabular-nums transition-all ${
                   active
-                    ? "bg-odds-active text-odds-active-foreground"
-                    : "bg-odds text-odds-foreground hover:bg-muted"
+                    ? "border-odds-active bg-odds-active text-odds-active-foreground"
+                    : "border-border bg-odds text-odds-foreground hover:border-accent/60 hover:bg-muted"
                 }`}
               >
                 <span className="text-[10px] font-semibold uppercase opacity-70">{o.label}</span>
@@ -79,7 +79,7 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
         <Link
           to="/match/$matchId"
           params={{ matchId: match.id }}
-          className="flex h-11 w-14 items-center justify-center gap-0.5 rounded-md bg-secondary text-xs font-bold text-secondary-foreground"
+          className="flex h-12 w-14 items-center justify-center gap-0.5 rounded-md border border-border bg-secondary text-xs font-semibold text-secondary-foreground transition-colors hover:border-accent/60"
         >
           +{match.marketCount}
           <ChevronRight className="h-3 w-3" />

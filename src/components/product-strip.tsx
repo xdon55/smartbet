@@ -14,16 +14,16 @@ const products = [
 export function ProductStrip() {
   return (
     <div className="no-scrollbar overflow-x-auto border-b border-border bg-card">
-      <div className="flex w-full gap-1 px-2 py-2">
+      <div className="mx-auto flex w-full max-w-5xl gap-1 px-3 py-2.5">
         {products.map((p) =>
           p.to ? (
             <Link
               key={p.id}
               to={p.to}
               activeOptions={{ exact: p.exact }}
-              activeProps={{ className: "bg-odds-active text-odds-active-foreground" }}
-              inactiveProps={{ className: "bg-secondary text-secondary-foreground" }}
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide transition-colors"
+              activeProps={{ className: "border-accent text-accent" }}
+              inactiveProps={{ className: "border-transparent text-muted-foreground hover:text-foreground" }}
+              className="inline-flex h-9 shrink-0 items-center gap-2 border-b-2 px-3 text-xs font-semibold transition-colors"
             >
               <p.icon className="h-3.5 w-3.5" />
               {p.name}
@@ -32,11 +32,11 @@ export function ProductStrip() {
             <button
               key={p.id}
               type="button"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide text-secondary-foreground/60"
+              className="inline-flex h-9 shrink-0 items-center gap-2 border-b-2 border-transparent px-3 text-xs font-semibold text-muted-foreground/60"
             >
               <p.icon className="h-3.5 w-3.5" />
               {p.name}
-              <span className="text-[9px] font-semibold normal-case opacity-70">soon</span>
+              <span className="text-[9px] font-medium opacity-70">Soon</span>
             </button>
           ),
         )}

@@ -56,33 +56,33 @@ function Index() {
   const list = filterMatches(base, filters);
 
   return (
-    <main className="mx-auto flex max-w-5xl gap-4 px-0 py-3 md:px-3">
-      <div className="min-w-0 flex-1 space-y-3">
-        <section className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:px-0">
+    <main className="mx-auto flex max-w-5xl gap-5 px-0 py-4 md:px-3 md:py-5">
+      <div className="min-w-0 flex-1 space-y-4">
+        <section className="no-scrollbar flex gap-3 overflow-x-auto px-3 md:px-0">
           {promos.map((p) => (
             <div
               key={p.title}
-              className="flex w-64 shrink-0 items-start gap-3 rounded-lg brand-gradient p-3 text-surface-foreground"
+              className="flex w-64 shrink-0 items-start gap-3 rounded-md border border-surface-foreground/10 brand-gradient p-4 text-surface-foreground shadow-[var(--shadow-card)]"
             >
               <p.icon className="mt-0.5 h-5 w-5 text-accent" />
               <div>
-                <p className="font-display text-sm font-bold uppercase">{p.title}</p>
-                <p className="text-xs opacity-80">{p.copy}</p>
+                <p className="font-display text-sm font-semibold">{p.title}</p>
+                <p className="mt-1 text-xs leading-relaxed opacity-75">{p.copy}</p>
               </div>
             </div>
           ))}
         </section>
 
-        <section className="overflow-hidden md:rounded-lg md:border md:border-border">
-          <div className="flex border-b border-border bg-secondary">
+        <section className="overflow-hidden bg-card md:rounded-md md:border md:border-border md:shadow-[var(--shadow-card)]">
+          <div className="flex border-b border-border bg-card px-3">
             {tabs.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
-                className={`flex-1 px-3 py-2.5 font-display text-sm font-bold uppercase tracking-wide transition-colors ${
+                className={`relative flex-1 px-3 py-3 font-display text-sm font-semibold transition-colors ${
                   tab === t.id
-                    ? "border-b-2 border-accent text-accent"
+                    ? "border-b-2 border-accent text-foreground"
                     : "text-secondary-foreground/70"
                 }`}
               >

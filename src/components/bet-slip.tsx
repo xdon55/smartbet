@@ -142,8 +142,8 @@ export function BetSlip() {
   return (
     <>
       {/* Desktop docked slip */}
-      <aside className="sticky top-16 hidden h-fit w-80 shrink-0 overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-card)] md:block">
-        <div className="brand-gradient px-4 py-2 font-display text-sm font-bold uppercase tracking-wide text-surface-foreground">
+      <aside className="sticky top-20 hidden h-fit w-80 shrink-0 overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:block">
+        <div className="brand-gradient border-b border-surface-foreground/10 px-4 py-3 font-display text-sm font-semibold text-surface-foreground">
           Bet slip
         </div>
         <SlipBody />
