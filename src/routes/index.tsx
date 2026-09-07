@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Flame, Gift, Ticket } from "lucide-react";
 import { matches } from "@/lib/betting-data";
 import { MatchCard } from "@/components/match-card";
 import { BetSlip } from "@/components/bet-slip";
+import {
+  SportsFilters,
+  defaultFilters,
+  filterMatches,
+  type SportsFilterState,
+} from "@/components/sports-filters";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,50 +36,77 @@ const promos = [
   { icon: Ticket, title: "Free bet Fridays", copy: "Stake UGX 5,000, get UGX 2,000 free" },
 ];
 
+const tabs = [
+  { id: "upcoming", label: "Upcoming" },
+  { id: "popular", label: "Popular" },
+  { id: "live", label: "Live" },
+];
+
 function Index() {
-  const upcoming = matches.filter((m) => !m.live);
-  const live = matches.filter((m) => m.live);
+  const [tab, setTab] = useState("upcoming");
+  const [filters, setFilters] = useState<SportsFilterState>(defaultFilters);
+
+  const base =
+    tab === "live"
+      ? matches.filter((m) => m.live)
+      : tab === "popular"
+        ? matches.filter((m) => m.popular)
+        : matches.filter((m) => !m.live);
+
+  const list = filterMatches(base, filters);
 
   return (
-    <>
-      <main className="mx-auto flex max-w-5xl gap-4 px-0 py-3 md:px-3">
-        <div className="min-w-0 flex-1 space-y-3">
-          <section className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:px-0">
-            {promos.map((p) => (
-              <div
-                key={p.title}
-                className="flex w-64 shrink-0 items-start gap-3 rounded-lg brand-gradient p-3 text-surface-foreground"
-              >
-                <p.icon className="mt-0.5 h-5 w-5 text-accent" />
-                <div>
-                  <p className="font-display text-sm font-bold uppercase">{p.title}</p>
-                  <p className="text-xs opacity-80">{p.copy}</p>
-                </div>
+    <main className="mx-auto flex max-w-5xl gap-4 px-0 py-3 md:px-3">
+      <div className="min-w-0 flex-1 space-y-3">
+        <section className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:px-0">
+          {promos.map((p) => (
+            <div
+              key={p.title}
+              className="flex w-64 shrink-0 items-start gap-3 rounded-lg brand-gradient p-3 text-surface-foreground"
+            >
+              <p.icon className="mt-0.5 h-5 w-5 text-accent" />
+              <div>
+                <p className="font-display text-sm font-bold uppercase">{p.title}</p>
+                <p className="text-xs opacity-80">{p.copy}</p>
               </div>
-            ))}
-          </section>
+            </div>
+          ))}
+        </section>
 
-          <section className="overflow-hidden md:rounded-lg md:border md:border-border">
-            <h2 className="flex items-center gap-2 bg-secondary px-3 py-2 font-display text-sm font-bold uppercase tracking-wide text-secondary-foreground">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-live" /> Live now
-            </h2>
-            {live.map((m) => (
-              <MatchCard key={m.id} match={m} />
+        <section className="overflow-hidden md:rounded-lg md:border md:border-border">
+          <div className="flex border-b border-border bg-secondary">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTab(t.id)}
+                className={`flex-1 px-3 py-2.5 font-display text-sm font-bold uppercase tracking-wide transition-colors ${
+                  tab === t.id
+                    ? "border-b-2 border-accent text-accent"
+                    : "text-secondary-foreground/70"
+                }`}
+              >
+                {t.id === "live" && (
+                  <span className="mr-1.5 inline-block h-2 w-2 animate-pulse rounded-full bg-live align-middle" />
+                )}
+                {t.label}
+              </button>
             ))}
-          </section>
+          </div>
 
-          <section className="overflow-hidden md:rounded-lg md:border md:border-border">
-            <h2 className="bg-secondary px-3 py-2 font-display text-sm font-bold uppercase tracking-wide text-secondary-foreground">
-              Upcoming highlights
-            </h2>
-            {upcoming.map((m) => (
-              <MatchCard key={m.id} match={m} />
-            ))}
-          </section>
-        </div>
+          <SportsFilters value={filters} onChange={setFilters} showKickoff={tab !== "live"} />
 
-        <BetSlip />
-      </main>
-    </>
+          {list.length ? (
+            list.map((m) => <MatchCard key={m.id} match={m} marketId={filters.market} />)
+          ) : (
+            <p className="bg-card px-3 py-10 text-center text-sm text-muted-foreground">
+              No events match these filters.
+            </p>
+          )}
+        </section>
+      </div>
+
+      <BetSlip />
+    </main>
   );
 }
