@@ -37,7 +37,9 @@ export function MatchCard({ match }: { match: Match }) {
       </div>
 
       <div className="mt-3 flex items-stretch gap-2">
-        <div className="grid flex-1 grid-cols-3 gap-2">
+        <div
+          className={`grid flex-1 gap-2 ${main.outcomes.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}
+        >
           {main.outcomes.map((o) => {
             const id = `${match.id}-${main.id}-${o.id}`;
             const active = has(id);
@@ -66,7 +68,6 @@ export function MatchCard({ match }: { match: Match }) {
               </button>
             );
           })}
-          {main.outcomes.length === 2 && <span className="hidden" />}
         </div>
         <button
           type="button"
