@@ -35,8 +35,6 @@ function Index() {
 
   return (
     <>
-      <ProductStrip />
-
       <main className="mx-auto flex max-w-5xl gap-4 px-0 py-3 md:px-3">
         <div className="min-w-0 flex-1 space-y-3">
           <section className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:px-0">
