@@ -1,13 +1,15 @@
-import { Trash2, X, Ticket } from "lucide-react";
+import { useState } from "react";
+import { Trash2, X, Ticket, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useBetSlip } from "@/lib/betslip";
 import { formatUgx } from "@/lib/betting-data";
 
 const quickStakes = [1000, 2000, 5000, 10000];
 
-function SlipBody() {
+function SlipBody({ fullscreen = false }: { fullscreen?: boolean }) {
   const { selections, remove, clear, stake, setStake, totalOdds, potentialWin, placeBet } =
     useBetSlip();
+  const [bookingCode, setBookingCode] = useState<string | null>(null);
 
   if (!selections.length) {
     return (
@@ -20,7 +22,8 @@ function SlipBody() {
   }
 
   return (
-    <div className="flex max-h-[75vh] flex-col">
+    <div className={`flex flex-col ${fullscreen ? "h-full" : "max-h-[75vh]"}`}>
+
       <div className="flex items-center justify-between border-b border-border px-4 py-2">
         <p className="text-sm font-bold">{selections.length} selections</p>
         <button
