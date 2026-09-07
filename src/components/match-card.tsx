@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
-import type { Match } from "@/lib/betting-data";
+import { Link } from "@tanstack/react-router";
+import { flagFor, type Match } from "@/lib/betting-data";
 import { useBetSlip } from "@/lib/betslip";
 
 export function MatchCard({ match, marketId }: { match: Match; marketId?: string }) {
@@ -21,7 +22,11 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
         <span className="ml-auto opacity-70">{main.name}</span>
       </div>
 
-      <div className="flex items-start gap-3">
+      <Link
+        to="/match/$matchId"
+        params={{ matchId: match.id }}
+        className="flex items-start gap-3"
+      >
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
             <p className="truncate text-sm font-semibold">{match.home}</p>
@@ -32,10 +37,11 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
             {match.live && <span className="text-sm font-bold tabular-nums">{match.live.awayScore}</span>}
           </div>
           <p className="mt-1 truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-            {match.country} · {match.league}
+            {flagFor(match.country)} {match.country} · {match.league}
           </p>
         </div>
-      </div>
+      </Link>
+
 
       <div className="mt-3 flex items-stretch gap-2">
         <div
