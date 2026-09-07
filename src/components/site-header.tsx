@@ -2,11 +2,18 @@ import { Link } from "@tanstack/react-router";
 import { Search, UserRound, Wallet } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { formatUgx } from "@/lib/betting-data";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { to: "/", label: "Sports" },
   { to: "/live", label: "Live" },
-  { to: "/my-bets", label: "My bets" },
 ];
 
 export function SiteHeader() {
@@ -45,13 +52,27 @@ export function SiteHeader() {
             <Wallet className="h-4 w-4 text-accent" />
             <span className="text-sm font-semibold tabular-nums">{formatUgx(48500)}</span>
           </div>
-          <button
-            type="button"
-            aria-label="Account"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-surface-foreground/80 transition-colors hover:bg-surface-foreground/10"
-          >
-            <UserRound className="h-4.5 w-4.5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              aria-label="Account"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-surface-foreground/80 transition-colors hover:bg-surface-foreground/10"
+            >
+              <UserRound className="h-4.5 w-4.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>My account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/my-bets">My bets</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>Deposit</DropdownMenuItem>
+              <DropdownMenuItem>Withdraw</DropdownMenuItem>
+              <DropdownMenuItem>Transactions</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

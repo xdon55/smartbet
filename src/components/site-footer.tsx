@@ -1,0 +1,80 @@
+import { Link } from "@tanstack/react-router";
+
+const columns = [
+  {
+    title: "Betting",
+    links: [
+      { label: "Sports", to: "/" as const },
+      { label: "Live betting", to: "/live" as const },
+      { label: "My bets", to: "/my-bets" as const },
+    ],
+  },
+];
+
+const info = [
+  "How to place a bet",
+  "Deposits & withdrawals",
+  "Bonus terms",
+  "Responsible gaming",
+  "Terms & conditions",
+  "Privacy policy",
+];
+
+export function SiteFooter() {
+  return (
+    <footer className="mt-6 border-t border-border bg-card">
+      <div className="mx-auto grid max-w-5xl gap-6 px-4 py-8 sm:grid-cols-3">
+        <div>
+          <p className="font-display text-xl font-bold leading-none">
+            SMART<span className="text-accent">BET</span>
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            SMARTBET is a sports betting brand offering football odds, live betting and instant
+            mobile money payouts in Ugandan shillings.
+          </p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Support: support@smartbet.example · Toll free 0800 123 456
+          </p>
+        </div>
+
+        {columns.map((col) => (
+          <div key={col.title}>
+            <p className="mb-2 text-xs font-bold uppercase tracking-wide">{col.title}</p>
+            <ul className="space-y-1.5">
+              {col.links.map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.to}
+                    className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <div>
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide">Help & legal</p>
+          <ul className="space-y-1.5">
+            {info.map((l) => (
+              <li key={l} className="text-xs text-muted-foreground">
+                {l}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-border px-4 py-4">
+        <p className="mx-auto max-w-5xl text-[11px] leading-relaxed text-muted-foreground">
+          You must be 18 years or older to open an account and place a bet. Gambling can be
+          addictive — please play responsibly and only stake what you can afford to lose. Odds and
+          markets shown are for demonstration purposes.
+          <br />© {new Date().getFullYear()} SMARTBET. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
+}

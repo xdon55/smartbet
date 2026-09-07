@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { matches } from "@/lib/betting-data";
 import { MatchCard } from "@/components/match-card";
-import { SportStrip } from "@/components/sport-strip";
+import { ProductStrip } from "@/components/product-strip";
 import { BetSlip } from "@/components/bet-slip";
 
 export const Route = createFileRoute("/live")({
@@ -27,7 +27,7 @@ function LivePage() {
 
   return (
     <>
-      <SportStrip />
+      <ProductStrip />
       <main className="mx-auto flex max-w-5xl gap-4 py-3 md:px-3">
         <div className="min-w-0 flex-1">
           <section className="overflow-hidden md:rounded-lg md:border md:border-border">
