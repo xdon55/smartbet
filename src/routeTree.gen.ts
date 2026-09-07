@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LiveRouteImport } from './routes/live'
-import { Route as MyBetsRouteImport } from './routes/my-bets'
+import { Route as MyBetsIndexRouteImport } from './routes/my-bets.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +23,40 @@ const LiveRoute = LiveRouteImport.update({
   path: '/live',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MyBetsRoute = MyBetsRouteImport.update({
-  id: '/my-bets',
-  path: '/my-bets',
+const MyBetsIndexRoute = MyBetsIndexRouteImport.update({
+  id: '/my-bets/',
+  path: '/my-bets/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
-  '/my-bets': typeof MyBetsRoute
+  '/my-bets/': typeof MyBetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
-  '/my-bets': typeof MyBetsRoute
+  '/my-bets': typeof MyBetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
-  '/my-bets': typeof MyBetsRoute
+  '/my-bets/': typeof MyBetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live' | '/my-bets'
+  fullPaths: '/' | '/live' | '/my-bets/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/live' | '/my-bets'
-  id: '__root__' | '/' | '/live' | '/my-bets'
+  id: '__root__' | '/' | '/live' | '/my-bets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LiveRoute: typeof LiveRoute
-  MyBetsRoute: typeof MyBetsRoute
+  MyBetsIndexRoute: typeof MyBetsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,11 +75,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/my-bets': {
-      id: '/my-bets'
+    '/my-bets/': {
+      id: '/my-bets/'
       path: '/my-bets'
-      fullPath: '/my-bets'
-      preLoaderRoute: typeof MyBetsRouteImport
+      fullPath: '/my-bets/'
+      preLoaderRoute: typeof MyBetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -88,7 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LiveRoute: LiveRoute,
-  MyBetsRoute: MyBetsRoute,
+  MyBetsIndexRoute: MyBetsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

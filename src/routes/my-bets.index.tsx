@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useBetSlip } from "@/lib/betslip";
 import { formatUgx } from "@/lib/betting-data";
 
-export const Route = createFileRoute("/my-bets")({
+export const Route = createFileRoute("/my-bets/")({
   head: () => ({
     meta: [
       { title: "My bets · SMARTBET" },
