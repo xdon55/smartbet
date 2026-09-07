@@ -52,13 +52,27 @@ export function SiteHeader() {
             <Wallet className="h-4 w-4 text-accent" />
             <span className="text-sm font-semibold tabular-nums">{formatUgx(48500)}</span>
           </div>
-          <button
-            type="button"
-            aria-label="Account"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-surface-foreground/80 transition-colors hover:bg-surface-foreground/10"
-          >
-            <UserRound className="h-4.5 w-4.5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              aria-label="Account"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-surface-foreground/80 transition-colors hover:bg-surface-foreground/10"
+            >
+              <UserRound className="h-4.5 w-4.5" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>My account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/my-bets">My bets</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>Deposit</DropdownMenuItem>
+              <DropdownMenuItem>Withdraw</DropdownMenuItem>
+              <DropdownMenuItem>Transactions</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
