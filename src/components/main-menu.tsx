@@ -7,9 +7,9 @@ import { countriesWithLeagues, flagFor } from "@/lib/betting-data";
 const products = [
   { id: "sports", name: "Sports", icon: Trophy, to: "/" as const },
   { id: "live", name: "Live", icon: Radio, to: "/live" as const },
-  { id: "casino", name: "Casino", icon: Spade, to: null },
-  { id: "aviator", name: "Aviator", icon: Plane, to: null },
-  { id: "crash", name: "Crash", icon: Rocket, to: null },
+  { id: "casino", name: "Casino", icon: Spade, to: "/casino" as const },
+  { id: "aviator", name: "Aviator", icon: Plane, to: "/aviator" as const },
+  { id: "crash", name: "Crash", icon: Rocket, to: "/crash" as const },
   { id: "slots", name: "Slots", icon: Dice5, to: null },
   { id: "virtuals", name: "Virtuals", icon: Gamepad2, to: null },
 ];
