@@ -90,7 +90,7 @@ export function SiteFooter() {
 
       <div className="border-t border-border px-4 py-4">
         <p className="mx-auto max-w-5xl text-[11px] leading-relaxed text-muted-foreground">
-          You must be 18 years or older to open an account and place a bet. Gambling can be
+          You must be 25 years or older to open an account and place a bet. Gambling can be
           addictive — please play responsibly and only stake what you can afford to lose. Odds and
           markets shown are for demonstration purposes.
           <br />© {new Date().getFullYear()} SMARTBET. All rights reserved.
