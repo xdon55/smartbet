@@ -16,6 +16,7 @@ import { Route as DepositRouteImport } from './routes/deposit'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as TransactionsRouteImport } from './routes/transactions'
 import { Route as WithdrawRouteImport } from './routes/withdraw'
+import { Route as MatchMatchIdRouteImport } from './routes/match.$matchId'
 import { Route as MyBetsIndexRouteImport } from './routes/my-bets.index'
 import { Route as MyBetsBetIdRouteImport } from './routes/my-bets.$betId'
 
@@ -54,6 +55,11 @@ const WithdrawRoute = WithdrawRouteImport.update({
   path: '/withdraw',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MatchMatchIdRoute = MatchMatchIdRouteImport.update({
+  id: '/match/$matchId',
+  path: '/match/$matchId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MyBetsIndexRoute = MyBetsIndexRouteImport.update({
   id: '/my-bets/',
   path: '/my-bets/',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/live': typeof LiveRoute
   '/transactions': typeof TransactionsRoute
   '/withdraw': typeof WithdrawRoute
+  '/match/$matchId': typeof MatchMatchIdRoute
   '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets/': typeof MyBetsIndexRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/live': typeof LiveRoute
   '/transactions': typeof TransactionsRoute
   '/withdraw': typeof WithdrawRoute
+  '/match/$matchId': typeof MatchMatchIdRoute
   '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets': typeof MyBetsIndexRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/live': typeof LiveRoute
   '/transactions': typeof TransactionsRoute
   '/withdraw': typeof WithdrawRoute
+  '/match/$matchId': typeof MatchMatchIdRoute
   '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets/': typeof MyBetsIndexRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/transactions'
     | '/withdraw'
+    | '/match/$matchId'
     | '/my-bets/$betId'
     | '/my-bets/'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/transactions'
     | '/withdraw'
+    | '/match/$matchId'
     | '/my-bets/$betId'
     | '/my-bets'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/live'
     | '/transactions'
     | '/withdraw'
+    | '/match/$matchId'
     | '/my-bets/$betId'
     | '/my-bets/'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   LiveRoute: typeof LiveRoute
   TransactionsRoute: typeof TransactionsRoute
   WithdrawRoute: typeof WithdrawRoute
+  MatchMatchIdRoute: typeof MatchMatchIdRoute
   MyBetsBetIdRoute: typeof MyBetsBetIdRoute
   MyBetsIndexRoute: typeof MyBetsIndexRoute
 }
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WithdrawRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/match/$matchId': {
+      id: '/match/$matchId'
+      path: '/match/$matchId'
+      fullPath: '/match/$matchId'
+      preLoaderRoute: typeof MatchMatchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/my-bets/': {
       id: '/my-bets/'
       path: '/my-bets'
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   LiveRoute: LiveRoute,
   TransactionsRoute: TransactionsRoute,
   WithdrawRoute: WithdrawRoute,
+  MatchMatchIdRoute: MatchMatchIdRoute,
   MyBetsBetIdRoute: MyBetsBetIdRoute,
   MyBetsIndexRoute: MyBetsIndexRoute,
 }

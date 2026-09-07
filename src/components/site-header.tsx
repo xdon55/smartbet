@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Search, Wallet } from "lucide-react";
+import { Wallet } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { MainMenu } from "./main-menu";
 import { AccountMenu } from "./account-menu";
+import { SearchDialog } from "./search-dialog";
 import { formatUgx } from "@/lib/betting-data";
 
 export function SiteHeader() {
@@ -18,14 +19,9 @@ export function SiteHeader() {
         </Link>
 
         <div className="ml-auto flex items-center gap-1">
-          <button
-            type="button"
-            aria-label="Search"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-surface-foreground/80 transition-colors hover:bg-surface-foreground/10"
-          >
-            <Search className="h-4.5 w-4.5" />
-          </button>
+          <SearchDialog />
           <ThemeToggle />
+
           <Link
             to="/deposit"
             className="ml-1 flex items-center gap-2 rounded-md bg-surface-foreground/10 px-2.5 py-1.5"

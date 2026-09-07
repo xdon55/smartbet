@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, Dice5, Gamepad2, Menu, Radio, Trophy } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { countriesWithLeagues } from "@/lib/betting-data";
+import { countriesWithLeagues, flagFor } from "@/lib/betting-data";
 
 const products = [
   { id: "sports", name: "Sports", icon: Trophy, to: "/" as const },
@@ -69,7 +69,11 @@ export function MainMenu() {
                   onClick={() => setExpanded(expanded === c.country ? null : c.country)}
                   className="flex w-full items-center justify-between rounded-md px-2 py-2 text-sm font-semibold hover:bg-muted"
                 >
-                  {c.country}
+                  <span className="flex items-center gap-2">
+                    <span className="text-base leading-none">{flagFor(c.country)}</span>
+                    {c.country}
+                  </span>
+
                   <ChevronDown
                     className={`h-4 w-4 transition-transform ${expanded === c.country ? "rotate-180" : ""}`}
                   />
