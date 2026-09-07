@@ -18,9 +18,6 @@ export function MatchCard({ match }: { match: Match }) {
         ) : (
           <span className="rounded bg-muted px-1.5 py-0.5 text-muted-foreground">{match.startsAt}</span>
         )}
-        <span className="truncate">
-          {match.country} · {match.league}
-        </span>
       </div>
 
       <div className="flex items-start gap-3">
@@ -33,6 +30,9 @@ export function MatchCard({ match }: { match: Match }) {
             <p className="truncate text-sm font-semibold">{match.away}</p>
             {match.live && <span className="text-sm font-bold tabular-nums">{match.live.awayScore}</span>}
           </div>
+          <p className="mt-1 truncate text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {match.country} · {match.league}
+          </p>
         </div>
       </div>
 

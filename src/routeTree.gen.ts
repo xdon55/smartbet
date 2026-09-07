@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as MyBetsIndexRouteImport } from './routes/my-bets.index'
+import { Route as MyBetsBetIdRouteImport } from './routes/my-bets.$betId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,34 +29,43 @@ const MyBetsIndexRoute = MyBetsIndexRouteImport.update({
   path: '/my-bets/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MyBetsBetIdRoute = MyBetsBetIdRouteImport.update({
+  id: '/my-bets/$betId',
+  path: '/my-bets/$betId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
+  '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets/': typeof MyBetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
+  '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets': typeof MyBetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/live': typeof LiveRoute
+  '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets/': typeof MyBetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live' | '/my-bets/'
+  fullPaths: '/' | '/live' | '/my-bets/$betId' | '/my-bets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live' | '/my-bets'
-  id: '__root__' | '/' | '/live' | '/my-bets/'
+  to: '/' | '/live' | '/my-bets/$betId' | '/my-bets'
+  id: '__root__' | '/' | '/live' | '/my-bets/$betId' | '/my-bets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LiveRoute: typeof LiveRoute
+  MyBetsBetIdRoute: typeof MyBetsBetIdRoute
   MyBetsIndexRoute: typeof MyBetsIndexRoute
 }
 
@@ -82,12 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MyBetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/my-bets/$betId': {
+      id: '/my-bets/$betId'
+      path: '/my-bets/$betId'
+      fullPath: '/my-bets/$betId'
+      preLoaderRoute: typeof MyBetsBetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LiveRoute: LiveRoute,
+  MyBetsBetIdRoute: MyBetsBetIdRoute,
   MyBetsIndexRoute: MyBetsIndexRoute,
 }
 export const routeTree = rootRouteImport

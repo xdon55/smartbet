@@ -2,11 +2,18 @@ import { Link } from "@tanstack/react-router";
 import { Search, UserRound, Wallet } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { formatUgx } from "@/lib/betting-data";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { to: "/", label: "Sports" },
   { to: "/live", label: "Live" },
-  { to: "/my-bets", label: "My bets" },
 ];
 
 export function SiteHeader() {
