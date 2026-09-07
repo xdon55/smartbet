@@ -76,13 +76,14 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
             );
           })}
         </div>
-        <button
-          type="button"
+        <Link
+          to="/match/$matchId"
+          params={{ matchId: match.id }}
           className="flex h-11 w-14 items-center justify-center gap-0.5 rounded-md bg-secondary text-xs font-bold text-secondary-foreground"
         >
           +{match.marketCount}
           <ChevronRight className="h-3 w-3" />
-        </button>
+        </Link>
       </div>
     </article>
   );
