@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { BetSlipProvider } from "../lib/betslip";
 import { SiteHeader } from "../components/site-header";
+import { ProductStrip } from "../components/product-strip";
 import { BottomNav } from "../components/bottom-nav";
 import { SiteFooter } from "../components/site-footer";
 import { Toaster } from "../components/ui/sonner";
@@ -134,6 +135,7 @@ function RootComponent() {
       <BetSlipProvider>
         <div className="min-h-screen bg-background pb-20 md:pb-8">
           <SiteHeader />
+          <ProductStrip />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           <SiteFooter />

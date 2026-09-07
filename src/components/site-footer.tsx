@@ -1,4 +1,13 @@
 import { Link } from "@tanstack/react-router";
+import { Facebook, Instagram, Send, Twitter, Youtube } from "lucide-react";
+
+const socials = [
+  { label: "Facebook", icon: Facebook },
+  { label: "X", icon: Twitter },
+  { label: "Instagram", icon: Instagram },
+  { label: "YouTube", icon: Youtube },
+  { label: "Telegram", icon: Send },
+];
 
 const columns = [
   {
@@ -35,6 +44,18 @@ export function SiteFooter() {
           <p className="mt-3 text-xs text-muted-foreground">
             Support: support@smartbet.example · Toll free 0800 123 456
           </p>
+          <div className="mt-3 flex gap-2">
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href="#"
+                aria-label={s.label}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                <s.icon className="h-4 w-4" />
+              </a>
+            ))}
+          </div>
         </div>
 
         {columns.map((col) => (
@@ -69,7 +90,7 @@ export function SiteFooter() {
 
       <div className="border-t border-border px-4 py-4">
         <p className="mx-auto max-w-5xl text-[11px] leading-relaxed text-muted-foreground">
-          You must be 18 years or older to open an account and place a bet. Gambling can be
+          You must be 25 years or older to open an account and place a bet. Gambling can be
           addictive — please play responsibly and only stake what you can afford to lose. Odds and
           markets shown are for demonstration purposes.
           <br />© {new Date().getFullYear()} SMARTBET. All rights reserved.

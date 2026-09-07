@@ -90,6 +90,12 @@ function MyBets() {
                 </p>
               </div>
               <div className="text-right">
+                <p className="text-[10px] uppercase text-muted-foreground">Total odds</p>
+                <p className="text-sm font-bold tabular-nums text-accent">
+                  {bet.totalOdds.toFixed(2)}
+                </p>
+              </div>
+              <div className="text-right">
                 <p className="text-[10px] uppercase text-muted-foreground">Stake</p>
                 <p className="text-sm font-bold tabular-nums">{formatUgx(bet.stake)}</p>
               </div>
