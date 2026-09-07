@@ -39,13 +39,13 @@ export function SportsFilters({
   ).sort();
 
   return (
-    <div className="space-y-2 border-b border-border bg-card px-3 py-2.5">
-      <div className="grid grid-cols-3 gap-2">
+    <div className="space-y-3 border-b border-border bg-card px-3 py-3">
+      <div className="grid grid-cols-3 gap-2.5">
         <Select
           value={value.sport}
           onValueChange={(v) => onChange({ ...value, sport: v, league: "all" })}
         >
-          <SelectTrigger className="h-9 text-xs">
+          <SelectTrigger className="h-10 rounded-md bg-background text-xs font-medium">
             <SelectValue placeholder="Sport" />
           </SelectTrigger>
           <SelectContent>
@@ -59,7 +59,7 @@ export function SportsFilters({
         </Select>
 
         <Select value={value.league} onValueChange={(v) => onChange({ ...value, league: v })}>
-          <SelectTrigger className="h-9 text-xs">
+          <SelectTrigger className="h-10 rounded-md bg-background text-xs font-medium">
             <SelectValue placeholder="League" />
           </SelectTrigger>
           <SelectContent>
@@ -73,7 +73,7 @@ export function SportsFilters({
         </Select>
 
         <Select value={value.market} onValueChange={(v) => onChange({ ...value, market: v })}>
-          <SelectTrigger className="h-9 text-xs">
+          <SelectTrigger className="h-10 rounded-md bg-background text-xs font-medium">
             <SelectValue placeholder="Market" />
           </SelectTrigger>
           <SelectContent>
@@ -93,10 +93,10 @@ export function SportsFilters({
               key={k.id}
               type="button"
               onClick={() => onChange({ ...value, kickoff: k.id })}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide transition-colors ${
+              className={`shrink-0 rounded-md border px-3 py-1.5 text-[10px] font-semibold transition-colors ${
                 value.kickoff === k.id
-                  ? "bg-odds-active text-odds-active-foreground"
-                  : "bg-secondary text-secondary-foreground"
+                  ? "border-odds-active bg-odds-active text-odds-active-foreground"
+                  : "border-border bg-secondary text-secondary-foreground hover:border-accent/50"
               }`}
             >
               {k.label}

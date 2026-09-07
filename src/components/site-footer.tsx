@@ -34,9 +34,7 @@ export function SiteFooter() {
     <footer className="mt-6 border-t border-border bg-card">
       <div className="mx-auto grid max-w-5xl gap-6 px-4 py-8 sm:grid-cols-3">
         <div>
-          <p className="font-display text-xl font-bold leading-none">
-            SMART<span className="text-accent">BET</span>
-          </p>
+          <p className="font-display text-xl font-bold leading-none">SMARTBET</p>
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             SMARTBET is a sports betting brand offering football odds, live betting and instant
             mobile money payouts in Ugandan shillings.
