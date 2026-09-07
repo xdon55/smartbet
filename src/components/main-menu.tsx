@@ -80,7 +80,7 @@ export function MainMenu() {
                       <li key={l}>
                         <Link
                           to="/"
-                          search={{ league: l }}
+                          
                           onClick={() => setOpen(false)}
                           className="block rounded px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground"
                         >
