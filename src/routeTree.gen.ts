@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AviatorRouteImport } from './routes/aviator'
 import { Route as BookingCodeRouteImport } from './routes/booking-code'
+import { Route as CasinoRouteImport } from './routes/casino'
+import { Route as CrashRouteImport } from './routes/crash'
 import { Route as DepositRouteImport } from './routes/deposit'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as TransactionsRouteImport } from './routes/transactions'
@@ -30,9 +33,24 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AviatorRoute = AviatorRouteImport.update({
+  id: '/aviator',
+  path: '/aviator',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BookingCodeRoute = BookingCodeRouteImport.update({
   id: '/booking-code',
   path: '/booking-code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CasinoRoute = CasinoRouteImport.update({
+  id: '/casino',
+  path: '/casino',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrashRoute = CrashRouteImport.update({
+  id: '/crash',
+  path: '/crash',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DepositRoute = DepositRouteImport.update({
@@ -74,7 +92,10 @@ const MyBetsBetIdRoute = MyBetsBetIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/aviator': typeof AviatorRoute
   '/booking-code': typeof BookingCodeRoute
+  '/casino': typeof CasinoRoute
+  '/crash': typeof CrashRoute
   '/deposit': typeof DepositRoute
   '/live': typeof LiveRoute
   '/transactions': typeof TransactionsRoute
@@ -86,7 +107,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/aviator': typeof AviatorRoute
   '/booking-code': typeof BookingCodeRoute
+  '/casino': typeof CasinoRoute
+  '/crash': typeof CrashRoute
   '/deposit': typeof DepositRoute
   '/live': typeof LiveRoute
   '/transactions': typeof TransactionsRoute
@@ -99,7 +123,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/aviator': typeof AviatorRoute
   '/booking-code': typeof BookingCodeRoute
+  '/casino': typeof CasinoRoute
+  '/crash': typeof CrashRoute
   '/deposit': typeof DepositRoute
   '/live': typeof LiveRoute
   '/transactions': typeof TransactionsRoute
@@ -113,7 +140,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/aviator'
     | '/booking-code'
+    | '/casino'
+    | '/crash'
     | '/deposit'
     | '/live'
     | '/transactions'
@@ -125,7 +155,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/aviator'
     | '/booking-code'
+    | '/casino'
+    | '/crash'
     | '/deposit'
     | '/live'
     | '/transactions'
@@ -137,7 +170,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/auth'
+    | '/aviator'
     | '/booking-code'
+    | '/casino'
+    | '/crash'
     | '/deposit'
     | '/live'
     | '/transactions'
@@ -150,7 +186,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  AviatorRoute: typeof AviatorRoute
   BookingCodeRoute: typeof BookingCodeRoute
+  CasinoRoute: typeof CasinoRoute
+  CrashRoute: typeof CrashRoute
   DepositRoute: typeof DepositRoute
   LiveRoute: typeof LiveRoute
   TransactionsRoute: typeof TransactionsRoute
@@ -176,11 +215,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aviator': {
+      id: '/aviator'
+      path: '/aviator'
+      fullPath: '/aviator'
+      preLoaderRoute: typeof AviatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/booking-code': {
       id: '/booking-code'
       path: '/booking-code'
       fullPath: '/booking-code'
       preLoaderRoute: typeof BookingCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/casino': {
+      id: '/casino'
+      path: '/casino'
+      fullPath: '/casino'
+      preLoaderRoute: typeof CasinoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crash': {
+      id: '/crash'
+      path: '/crash'
+      fullPath: '/crash'
+      preLoaderRoute: typeof CrashRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/deposit': {
@@ -238,7 +298,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  AviatorRoute: AviatorRoute,
   BookingCodeRoute: BookingCodeRoute,
+  CasinoRoute: CasinoRoute,
+  CrashRoute: CrashRoute,
   DepositRoute: DepositRoute,
   LiveRoute: LiveRoute,
   TransactionsRoute: TransactionsRoute,

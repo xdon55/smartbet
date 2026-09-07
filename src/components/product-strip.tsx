@@ -4,9 +4,9 @@ import { Dice5, Gamepad2, Plane, Radio, Rocket, Spade, Trophy } from "lucide-rea
 const products = [
   { id: "sports", name: "Sports", icon: Trophy, to: "/" as const, exact: true },
   { id: "live", name: "Live", icon: Radio, to: "/live" as const, exact: false },
-  { id: "casino", name: "Casino", icon: Spade, to: null },
-  { id: "aviator", name: "Aviator", icon: Plane, to: null },
-  { id: "crash", name: "Crash", icon: Rocket, to: null },
+  { id: "casino", name: "Casino", icon: Spade, to: "/casino" as const, exact: false },
+  { id: "aviator", name: "Aviator", icon: Plane, to: "/aviator" as const, exact: false },
+  { id: "crash", name: "Crash", icon: Rocket, to: "/crash" as const, exact: false },
   { id: "slots", name: "Slots", icon: Dice5, to: null },
   { id: "virtuals", name: "Virtuals", icon: Gamepad2, to: null },
 ];
