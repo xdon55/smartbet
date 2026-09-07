@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ChevronDown, Dice5, Gamepad2, Menu, Radio, Trophy } from "lucide-react";
+import { ChevronDown, Dice5, Gamepad2, Menu, Plane, Radio, Rocket, Spade, Trophy } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { countriesWithLeagues, flagFor } from "@/lib/betting-data";
 
 const products = [
   { id: "sports", name: "Sports", icon: Trophy, to: "/" as const },
   { id: "live", name: "Live", icon: Radio, to: "/live" as const },
+  { id: "casino", name: "Casino", icon: Spade, to: null },
+  { id: "aviator", name: "Aviator", icon: Plane, to: null },
+  { id: "crash", name: "Crash", icon: Rocket, to: null },
   { id: "slots", name: "Slots", icon: Dice5, to: null },
   { id: "virtuals", name: "Virtuals", icon: Gamepad2, to: null },
 ];
