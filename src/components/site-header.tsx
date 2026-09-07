@@ -11,33 +11,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const navLinks = [
-  { to: "/", label: "Sports" },
-  { to: "/live", label: "Live" },
-];
-
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 brand-gradient text-surface-foreground">
       <div className="mx-auto flex h-14 max-w-5xl items-center gap-3 px-3">
-        <Link to="/" className="flex items-baseline gap-1 font-display text-2xl font-bold leading-none">
-          <span className="tracking-tight">SMART</span>
-          <span className="text-accent tracking-tight">BET</span>
+        <Link
+          to="/"
+          className="font-display text-2xl font-bold leading-none tracking-tight text-surface-foreground"
+        >
+          SMARTBET
         </Link>
 
-        <nav className="ml-4 hidden gap-1 md:flex">
-          {navLinks.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              activeOptions={{ exact: l.to === "/" }}
-              activeProps={{ className: "bg-surface-foreground/15" }}
-              className="rounded-md px-3 py-1.5 text-sm font-semibold text-surface-foreground/85 transition-colors hover:bg-surface-foreground/10"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
 
         <div className="ml-auto flex items-center gap-1">
           <button

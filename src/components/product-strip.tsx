@@ -11,7 +11,7 @@ const products = [
 export function ProductStrip() {
   return (
     <div className="no-scrollbar overflow-x-auto border-b border-border bg-card">
-      <div className="mx-auto flex max-w-5xl gap-1 px-2 py-2">
+      <div className="flex w-full gap-1 px-2 py-2 sm:justify-center">
         {products.map((p) =>
           p.to ? (
             <Link

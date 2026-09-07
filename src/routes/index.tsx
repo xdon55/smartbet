@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Flame, Gift, Ticket } from "lucide-react";
 import { matches } from "@/lib/betting-data";
 import { MatchCard } from "@/components/match-card";
-import { ProductStrip } from "@/components/product-strip";
 import { BetSlip } from "@/components/bet-slip";
 
 export const Route = createFileRoute("/")({
