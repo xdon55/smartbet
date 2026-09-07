@@ -118,6 +118,12 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" className="dark">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var t=localStorage.getItem('smartbet-theme');document.documentElement.classList.toggle('dark',t?t==='dark':true)}catch(e){}",
+          }}
+        />
       </head>
       <body>
         {children}
