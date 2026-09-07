@@ -2,9 +2,9 @@ import { ChevronRight } from "lucide-react";
 import type { Match } from "@/lib/betting-data";
 import { useBetSlip } from "@/lib/betslip";
 
-export function MatchCard({ match }: { match: Match }) {
+export function MatchCard({ match, marketId }: { match: Match; marketId?: string }) {
   const { toggle, has } = useBetSlip();
-  const main = match.markets[0];
+  const main = (marketId && match.markets.find((m) => m.id === marketId)) || match.markets[0];
   if (!main) return null;
 
   return (
@@ -18,6 +18,7 @@ export function MatchCard({ match }: { match: Match }) {
         ) : (
           <span className="rounded bg-muted px-1.5 py-0.5 text-muted-foreground">{match.startsAt}</span>
         )}
+        <span className="ml-auto opacity-70">{main.name}</span>
       </div>
 
       <div className="flex items-start gap-3">

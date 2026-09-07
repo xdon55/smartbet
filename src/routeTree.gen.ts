@@ -10,7 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BookingCodeRouteImport } from './routes/booking-code'
+import { Route as DepositRouteImport } from './routes/deposit'
 import { Route as LiveRouteImport } from './routes/live'
+import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as WithdrawRouteImport } from './routes/withdraw'
 import { Route as MyBetsIndexRouteImport } from './routes/my-bets.index'
 import { Route as MyBetsBetIdRouteImport } from './routes/my-bets.$betId'
 
@@ -19,9 +24,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BookingCodeRoute = BookingCodeRouteImport.update({
+  id: '/booking-code',
+  path: '/booking-code',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DepositRoute = DepositRouteImport.update({
+  id: '/deposit',
+  path: '/deposit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LiveRoute = LiveRouteImport.update({
   id: '/live',
   path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsRoute = TransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WithdrawRoute = WithdrawRouteImport.update({
+  id: '/withdraw',
+  path: '/withdraw',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyBetsIndexRoute = MyBetsIndexRouteImport.update({
@@ -37,34 +67,82 @@ const MyBetsBetIdRoute = MyBetsBetIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/booking-code': typeof BookingCodeRoute
+  '/deposit': typeof DepositRoute
   '/live': typeof LiveRoute
+  '/transactions': typeof TransactionsRoute
+  '/withdraw': typeof WithdrawRoute
   '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets/': typeof MyBetsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/booking-code': typeof BookingCodeRoute
+  '/deposit': typeof DepositRoute
   '/live': typeof LiveRoute
+  '/transactions': typeof TransactionsRoute
+  '/withdraw': typeof WithdrawRoute
   '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets': typeof MyBetsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/booking-code': typeof BookingCodeRoute
+  '/deposit': typeof DepositRoute
   '/live': typeof LiveRoute
+  '/transactions': typeof TransactionsRoute
+  '/withdraw': typeof WithdrawRoute
   '/my-bets/$betId': typeof MyBetsBetIdRoute
   '/my-bets/': typeof MyBetsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live' | '/my-bets/$betId' | '/my-bets/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/booking-code'
+    | '/deposit'
+    | '/live'
+    | '/transactions'
+    | '/withdraw'
+    | '/my-bets/$betId'
+    | '/my-bets/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live' | '/my-bets/$betId' | '/my-bets'
-  id: '__root__' | '/' | '/live' | '/my-bets/$betId' | '/my-bets/'
+  to:
+    | '/'
+    | '/auth'
+    | '/booking-code'
+    | '/deposit'
+    | '/live'
+    | '/transactions'
+    | '/withdraw'
+    | '/my-bets/$betId'
+    | '/my-bets'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/booking-code'
+    | '/deposit'
+    | '/live'
+    | '/transactions'
+    | '/withdraw'
+    | '/my-bets/$betId'
+    | '/my-bets/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  BookingCodeRoute: typeof BookingCodeRoute
+  DepositRoute: typeof DepositRoute
   LiveRoute: typeof LiveRoute
+  TransactionsRoute: typeof TransactionsRoute
+  WithdrawRoute: typeof WithdrawRoute
   MyBetsBetIdRoute: typeof MyBetsBetIdRoute
   MyBetsIndexRoute: typeof MyBetsIndexRoute
 }
@@ -78,11 +156,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/booking-code': {
+      id: '/booking-code'
+      path: '/booking-code'
+      fullPath: '/booking-code'
+      preLoaderRoute: typeof BookingCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/deposit': {
+      id: '/deposit'
+      path: '/deposit'
+      fullPath: '/deposit'
+      preLoaderRoute: typeof DepositRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/live': {
       id: '/live'
       path: '/live'
       fullPath: '/live'
       preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/withdraw': {
+      id: '/withdraw'
+      path: '/withdraw'
+      fullPath: '/withdraw'
+      preLoaderRoute: typeof WithdrawRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my-bets/': {
@@ -104,7 +217,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  BookingCodeRoute: BookingCodeRoute,
+  DepositRoute: DepositRoute,
   LiveRoute: LiveRoute,
+  TransactionsRoute: TransactionsRoute,
+  WithdrawRoute: WithdrawRoute,
   MyBetsBetIdRoute: MyBetsBetIdRoute,
   MyBetsIndexRoute: MyBetsIndexRoute,
 }
