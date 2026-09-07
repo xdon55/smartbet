@@ -256,6 +256,83 @@ export const countriesWithLeagues = [
 export const allLeagues = Array.from(new Set(matches.map((m) => m.league))).sort();
 export const allCountries = Array.from(new Set(matches.map((m) => m.country))).sort();
 
+export const countryFlags: Record<string, string> = {
+  Uganda: "🇺🇬",
+  England: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+  Spain: "🇪🇸",
+  Italy: "🇮🇹",
+  Germany: "🇩🇪",
+  France: "🇫🇷",
+  Africa: "🌍",
+  USA: "🇺🇸",
+  Kenya: "🇰🇪",
+  Tanzania: "🇹🇿",
+};
+
+export const flagFor = (country: string) => countryFlags[country] ?? "🏳️";
+
+/** Extra mock markets shown on a game detail page. */
+export function detailMarkets(match: Match): Market[] {
+  const base = match.markets;
+  const extras: Market[] = [
+    {
+      id: "dc",
+      name: "Double chance",
+      outcomes: [
+        { id: "1x", label: "1X", odds: 1.32 },
+        { id: "12", label: "12", odds: 1.28 },
+        { id: "x2", label: "X2", odds: 1.55 },
+      ],
+    },
+    {
+      id: "ou15",
+      name: "Total goals 1.5",
+      outcomes: [
+        { id: "over", label: "Over", odds: 1.28 },
+        { id: "under", label: "Under", odds: 3.4 },
+      ],
+    },
+    {
+      id: "ou35",
+      name: "Total goals 3.5",
+      outcomes: [
+        { id: "over", label: "Over", odds: 2.9 },
+        { id: "under", label: "Under", odds: 1.38 },
+      ],
+    },
+    {
+      id: "dnb",
+      name: "Draw no bet",
+      outcomes: [
+        { id: "1", label: match.home, odds: 1.72 },
+        { id: "2", label: match.away, odds: 2.05 },
+      ],
+    },
+    {
+      id: "ht",
+      name: "Half time result",
+      outcomes: [
+        { id: "1", label: "1", odds: 2.85 },
+        { id: "X", label: "X", odds: 2.1 },
+        { id: "2", label: "2", odds: 3.9 },
+      ],
+    },
+    {
+      id: "cs",
+      name: "Correct score",
+      outcomes: [
+        { id: "1-0", label: "1-0", odds: 6.5 },
+        { id: "2-1", label: "2-1", odds: 8.5 },
+        { id: "1-1", label: "1-1", odds: 6.0 },
+        { id: "0-0", label: "0-0", odds: 9.5 },
+        { id: "0-1", label: "0-1", odds: 8.0 },
+        { id: "1-2", label: "1-2", odds: 11.0 },
+      ],
+    },
+  ];
+  return match.sport === "Football" ? [...base, ...extras] : [...base, extras[3]!];
+}
+
 export const formatUgx = (value: number) =>
   new Intl.NumberFormat("en-UG", {
     style: "currency",
