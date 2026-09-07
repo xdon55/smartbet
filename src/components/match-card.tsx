@@ -5,6 +5,7 @@ import { useBetSlip } from "@/lib/betslip";
 export function MatchCard({ match }: { match: Match }) {
   const { toggle, has } = useBetSlip();
   const main = match.markets[0];
+  if (!main) return null;
 
   return (
     <article className="border-b border-border bg-card px-3 py-3 last:border-b-0">
