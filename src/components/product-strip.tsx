@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Dice5, Gamepad2, Plane, Radio, Rocket, Spade, Trophy } from "lucide-react";
+import { Dice5, Gamepad2, House, Plane, Radio, Rocket, Spade, Trophy } from "lucide-react";
 
 const products = [
-  { id: "sports", name: "Sports", icon: Trophy, to: "/" as const, exact: true },
+  { id: "home", name: "Home", icon: House, to: "/" as const, exact: true },
+  { id: "sports", name: "Sports", icon: Trophy, to: "/sports" as const, exact: false },
   { id: "live", name: "Live", icon: Radio, to: "/live" as const, exact: false },
   { id: "casino", name: "Casino", icon: Spade, to: "/casino" as const, exact: false },
   { id: "aviator", name: "Aviator", icon: Plane, to: "/aviator" as const, exact: false },
@@ -13,7 +14,7 @@ const products = [
 
 export function ProductStrip() {
   return (
-    <div className="no-scrollbar overflow-x-auto border-b border-border bg-card">
+    <div className="no-scrollbar sticky top-16 z-30 overflow-x-auto border-b border-border bg-card">
       <div className="mx-auto flex w-full max-w-5xl gap-1 px-3 py-2.5">
         {products.map((p) =>
           p.to ? (

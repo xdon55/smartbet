@@ -3,7 +3,8 @@ import { Home, Radio, Receipt, Ticket, Dice5 } from "lucide-react";
 import { useBetSlip } from "@/lib/betslip";
 
 const items = [
-  { to: "/", label: "Sports", icon: Home, exact: true },
+  { to: "/", label: "Home", icon: Home, exact: true },
+  { to: "/sports", label: "Sports", icon: Trophy, exact: false },
   { to: "/live", label: "Live", icon: Radio, exact: false },
   { to: "/my-bets", label: "My bets", icon: Receipt, exact: false },
 ];

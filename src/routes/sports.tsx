@@ -11,7 +11,7 @@ import {
   type SportsFilterState,
 } from "@/components/sports-filters";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/sports")({
   head: () => ({
     meta: [
       { title: "SMARTBET · Today's football odds in UGX" },
@@ -94,7 +94,9 @@ function Index() {
             ))}
           </div>
 
-          <SportsFilters value={filters} onChange={setFilters} showKickoff={tab !== "live"} />
+          <div className="sticky top-[7.5rem] z-20 bg-card shadow-[0_6px_12px_-12px_rgba(0,0,0,0.6)]">
+            <SportsFilters value={filters} onChange={setFilters} showKickoff={tab !== "live"} />
+          </div>
 
           {list.length ? (
             list.map((m) => <MatchCard key={m.id} match={m} marketId={filters.market} />)
