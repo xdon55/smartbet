@@ -13,7 +13,7 @@ export function SiteHeader() {
         <MainMenu />
         <Link
           to="/"
-          className="font-display text-xl font-bold leading-none text-surface-foreground"
+          className="font-display text-lg font-bold leading-none text-surface-foreground"
         >
           SMARTBET
         </Link>
