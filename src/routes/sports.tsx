@@ -14,7 +14,7 @@ import {
 export const Route = createFileRoute("/sports")({
   head: () => ({
     meta: [
-      { title: "SMARTBET · Today's football odds in UGX" },
+      { title: "Sports betting · Today's football odds in UGX | SMARTBET" },
       {
         name: "description",
         content:
