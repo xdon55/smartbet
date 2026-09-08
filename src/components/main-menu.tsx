@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, Dice5, Gamepad2, Menu, Plane, Radio, Rocket, Spade, Trophy } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -17,6 +17,15 @@ const products = [
 export function MainMenu() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>("Uganda");
+
+  useEffect(() => {
+    if (open) {
+      document.documentElement.classList.add("overflow-hidden");
+    } else {
+      document.documentElement.classList.remove("overflow-hidden");
+    }
+    return () => document.documentElement.classList.remove("overflow-hidden");
+  }, [open]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
