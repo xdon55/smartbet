@@ -27,8 +27,10 @@ export function MainMenu() {
         <Menu className="h-5 w-5" />
       </SheetTrigger>
       <SheetContent side="left" className="w-80 overflow-y-auto p-0">
-        <SheetHeader className="border-b border-border px-4 py-3">
-          <SheetTitle className="font-display text-lg uppercase tracking-wide">Menu</SheetTitle>
+        <SheetHeader className="border-b border-border px-4 py-3 flex flex-row items-center justify-start">
+          <SheetTitle className="font-display text-lg font-bold uppercase tracking-wide text-foreground">
+            <Link to="/" onClick={() => setOpen(false)} className="hover:opacity-90">SMARTBET</Link>
+          </SheetTitle>
         </SheetHeader>
 
         <div className="px-4 py-3">
