@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Search, X } from "lucide-react";
+import { ArrowLeft, Search, X } from "lucide-react";
 import { matches, flagFor } from "@/lib/betting-data";
 
 export function SearchDialog() {
@@ -19,6 +19,11 @@ export function SearchDialog() {
       .slice(0, 12);
   }, [q]);
 
+  const close = () => {
+    setOpen(false);
+    setQ("");
+  };
+
   return (
     <>
       <button
@@ -31,27 +36,44 @@ export function SearchDialog() {
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50">
-          <div
-            className="absolute inset-0 bg-foreground/40"
-            aria-hidden
-            onClick={() => setOpen(false)}
-          />
-          <div className="absolute inset-x-0 top-0 max-h-full overflow-y-auto bg-card shadow-[var(--shadow-lift)]">
-            <div className="flex items-center gap-2 border-b border-border px-3 py-3">
-              <Search className="h-4 w-4 text-muted-foreground" />
-              <input
-                autoFocus
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Search teams, leagues, countries"
-                className="flex-1 bg-transparent text-sm outline-none"
-              />
-              <button type="button" aria-label="Close search" onClick={() => setOpen(false)}>
-                <X className="h-4.5 w-4.5 text-muted-foreground" />
+        <div className="fixed inset-0 z-[60] flex flex-col bg-background">
+          {/* Search header bar */}
+          <div className="brand-gradient border-b border-surface-foreground/10 px-3 py-3">
+            <div className="mx-auto flex max-w-5xl items-center gap-2">
+              <button
+                type="button"
+                aria-label="Back"
+                onClick={close}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-surface-foreground/80 transition-colors hover:bg-surface-foreground/10"
+              >
+                <ArrowLeft className="h-5 w-5" />
               </button>
-            </div>
 
+              <div className="flex flex-1 items-center gap-2 rounded-md border border-accent bg-surface-foreground/10 px-3 py-2">
+                <Search className="h-4 w-4 shrink-0 text-surface-foreground/70" />
+                <input
+                  autoFocus
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Team or league..."
+                  className="min-w-0 flex-1 bg-transparent text-sm text-surface-foreground outline-none placeholder:text-surface-foreground/50"
+                />
+                {q && (
+                  <button
+                    type="button"
+                    aria-label="Clear search"
+                    onClick={() => setQ("")}
+                    className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-surface-foreground/70 transition-colors hover:bg-surface-foreground/10"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="flex-1 overflow-y-auto">
             <div className="mx-auto max-w-2xl">
               {!q.trim() && (
                 <p className="px-4 py-8 text-center text-sm text-muted-foreground">
@@ -60,7 +82,7 @@ export function SearchDialog() {
               )}
               {q.trim() && !results.length && (
                 <p className="px-4 py-8 text-center text-sm text-muted-foreground">
-                  No events found for “{q}”.
+                  No events found for "{q}".
                 </p>
               )}
               {results.map((m) => (
@@ -68,10 +90,7 @@ export function SearchDialog() {
                   key={m.id}
                   to="/match/$matchId"
                   params={{ matchId: m.id }}
-                  onClick={() => {
-                    setOpen(false);
-                    setQ("");
-                  }}
+                  onClick={close}
                   className="block border-b border-border px-4 py-3 hover:bg-muted"
                 >
                   <p className="text-sm font-bold">
