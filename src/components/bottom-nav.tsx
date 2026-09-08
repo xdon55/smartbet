@@ -13,7 +13,7 @@ export function BottomNav() {
   const { selections, setOpen } = useBetSlip();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-foreground/10 bg-surface md:hidden">
       <div className="mx-auto grid max-w-5xl grid-cols-6">
         {items.map((item) => (
           <Link
@@ -21,7 +21,7 @@ export function BottomNav() {
             to={item.to}
             activeOptions={{ exact: item.exact }}
             activeProps={{ className: "text-accent" }}
-            className="flex flex-col items-center gap-1 py-2 text-[11px] font-semibold text-muted-foreground"
+            className="flex flex-col items-center gap-1 py-2 text-[11px] font-semibold text-surface-foreground/70"
           >
             <item.icon className="h-5 w-5" />
             {item.label}
@@ -30,7 +30,7 @@ export function BottomNav() {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="relative flex flex-col items-center gap-1 py-2 text-[11px] font-semibold text-muted-foreground"
+          className="relative flex flex-col items-center gap-1 py-2 text-[11px] font-semibold text-surface-foreground/70"
         >
           <Ticket className="h-5 w-5" />
           Bet slip
@@ -40,7 +40,7 @@ export function BottomNav() {
             </span>
           )}
         </button>
-        <span className="flex flex-col items-center gap-1 py-2 text-[11px] font-semibold text-muted-foreground/50">
+        <span className="flex flex-col items-center gap-1 py-2 text-[11px] font-semibold text-surface-foreground/40">
           <Dice5 className="h-5 w-5" />
           Casino
         </span>
