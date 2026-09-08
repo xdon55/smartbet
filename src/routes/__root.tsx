@@ -139,7 +139,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <BetSlipProvider>
-        <div className="min-h-screen bg-background pb-20 md:pb-8">
+        <div className="min-h-screen bg-background pb-20 pt-30 md:pb-8">
           <SiteHeader />
           <ProductStrip />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
