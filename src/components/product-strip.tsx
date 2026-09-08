@@ -15,7 +15,7 @@ const products = [
 export function ProductStrip() {
   return (
     <>
-      <div className="no-scrollbar fixed inset-x-0 top-16 z-30 overflow-x-auto border-b border-border bg-card lg:sticky lg:top-16">
+      <div className="no-scrollbar fixed inset-x-0 top-16 z-30 overflow-x-auto border-b border-border bg-card">
         <div className="mx-auto flex w-full max-w-5xl gap-1 px-3 py-2.5">
           {products.map((p) =>
             p.to ? (
@@ -44,7 +44,7 @@ export function ProductStrip() {
           )}
         </div>
       </div>
-      <div className="h-14 lg:hidden" aria-hidden="true" />
+      
     </>
   );
 }
