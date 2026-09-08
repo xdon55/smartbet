@@ -39,7 +39,7 @@ function SlipBody({ fullscreen = false }: { fullscreen?: boolean }) {
         {selections.map((s) => (
           <div key={s.id} className="flex items-start gap-3 border-b border-border px-4 py-3">
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold">{s.match}</p>
+              <p className="truncate text-sm font-bold">{s.match}</p>
               <p className="text-xs text-muted-foreground">
                 {s.market} · <span className="text-foreground font-semibold">{s.pick}</span>
               </p>
