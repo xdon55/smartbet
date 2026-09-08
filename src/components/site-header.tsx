@@ -27,7 +27,7 @@ export function SiteHeader() {
             className="ml-1 flex items-center gap-2 rounded-md bg-surface-foreground/10 px-2.5 py-1.5"
           >
             <Wallet className="h-4 w-4 text-accent" />
-            <span className="text-sm font-semibold tabular-nums">{formatUgx(48500)}</span>
+            <span className="text-xs font-semibold tabular-nums">{formatUgx(48500)}</span>
           </Link>
           <AccountMenu />
         </div>
