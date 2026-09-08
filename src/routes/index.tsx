@@ -409,7 +409,7 @@ function HomePage() {
                         : "bg-accent text-accent-foreground"
                     }`}
                   >
-                    {active ? "In slip" : "Add combo"}
+                    {active ? "In slip" : "Add to Betslip"}
                   </button>
                 </div>
               );
