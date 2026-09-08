@@ -5,10 +5,7 @@ import {
   ChevronRight,
   Flame,
   Layers,
-  Plane,
   Radio,
-  Rocket,
-  Spade,
   Sparkles,
   Trophy,
   Users,
@@ -79,13 +76,6 @@ const topLeagues = [
   { name: "NBA", country: "USA" },
 ];
 
-const quickProducts = [
-  { name: "Sports", icon: Trophy, to: "/sports" as const },
-  { name: "Live", icon: Radio, to: "/live" as const },
-  { name: "Casino", icon: Spade, to: "/casino" as const },
-  { name: "Aviator", icon: Plane, to: "/aviator" as const },
-  { name: "Crash", icon: Rocket, to: "/crash" as const },
-];
 
 function useCombos() {
   return [
@@ -207,18 +197,6 @@ function HomePage() {
       <div className="min-w-0 flex-1 space-y-6">
         <BannerSlider />
 
-        <section className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:px-0">
-          {quickProducts.map((p) => (
-            <Link
-              key={p.name}
-              to={p.to}
-              className="flex h-16 w-24 shrink-0 flex-col items-center justify-center gap-1.5 rounded-md border border-border bg-card text-xs font-semibold text-card-foreground transition-colors hover:border-accent/60"
-            >
-              <p.icon className="h-4 w-4 text-accent" />
-              {p.name}
-            </Link>
-          ))}
-        </section>
 
         <div className="space-y-3">
           <SectionHead title="Top leagues" icon={Trophy} to="/sports" />
