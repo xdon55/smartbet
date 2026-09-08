@@ -251,7 +251,7 @@ function HomePage() {
         )}
 
         <div className="space-y-3">
-          <SectionHead title="Featured matches" icon={Flame} to="/sports" />
+          <SectionHead title="Big games" icon={Flame} to="/sports" />
           <section className="overflow-hidden bg-card md:rounded-md md:border md:border-border md:shadow-[var(--shadow-card)]">
             {featured.map((m) => (
               <MatchCard key={m.id} match={m} marketId="1x2" />
@@ -260,7 +260,7 @@ function HomePage() {
         </div>
 
         <div className="space-y-3">
-          <SectionHead title="Match combos" icon={Layers} />
+          <SectionHead title="Multiple of the day" icon={Layers} />
           <div className="no-scrollbar flex gap-3 overflow-x-auto px-3 md:px-0">
             {combos.map((c) => {
               const legs = c.picks.map((m) => {
@@ -324,7 +324,7 @@ function HomePage() {
         </div>
 
         <div className="space-y-3">
-          <SectionHead title="Top games" icon={Sparkles} to="/casino" />
+          <SectionHead title="Trending" icon={Sparkles} to="/casino" />
           <div className="grid grid-cols-2 gap-3 px-3 sm:grid-cols-3 md:grid-cols-4 md:px-0">
             {topGames.map((g) => (
               <Link
