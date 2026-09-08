@@ -18,6 +18,15 @@ export function MainMenu() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>("Uganda");
 
+  useEffect(() => {
+    if (open) {
+      document.documentElement.classList.add("overflow-hidden");
+    } else {
+      document.documentElement.classList.remove("overflow-hidden");
+    }
+    return () => document.documentElement.classList.remove("overflow-hidden");
+  }, [open]);
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
