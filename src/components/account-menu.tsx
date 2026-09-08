@@ -45,7 +45,7 @@ export function AccountMenu() {
       </SheetTrigger>
       <SheetContent side="right" className="w-full p-0 sm:w-80 flex flex-col">
         <SheetHeader className="border-b border-border px-4 py-3">
-          <SheetTitle className="font-display text-lg uppercase tracking-wide">My account</SheetTitle>
+          <SheetTitle className="text-left font-display text-lg uppercase tracking-wide">My account</SheetTitle>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto">
