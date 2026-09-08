@@ -94,9 +94,7 @@ function Index() {
             ))}
           </div>
 
-          <div className="sticky top-[7.5rem] z-20 bg-card shadow-[0_6px_12px_-12px_rgba(0,0,0,0.6)]">
-            <SportsFilters value={filters} onChange={setFilters} showKickoff={tab !== "live"} />
-          </div>
+          <SportsFilters value={filters} onChange={setFilters} showKickoff={tab !== "live"} />
 
           {list.length ? (
             list.map((m) => <MatchCard key={m.id} match={m} marketId={filters.market} />)
