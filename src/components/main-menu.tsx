@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { countriesWithLeagues, flagFor } from "@/lib/betting-data";
 
 const products = [
-  { id: "sports", name: "Sports", icon: Trophy, to: "/" as const },
+  { id: "sports", name: "Sports", icon: Trophy, to: "/sports" as const },
   { id: "live", name: "Live", icon: Radio, to: "/live" as const },
   { id: "casino", name: "Casino", icon: Spade, to: "/casino" as const },
   { id: "aviator", name: "Aviator", icon: Plane, to: "/aviator" as const },
@@ -86,7 +86,7 @@ export function MainMenu() {
                     {c.leagues.map((l) => (
                       <li key={l}>
                         <Link
-                          to="/"
+                          to="/sports"
                           
                           onClick={() => setOpen(false)}
                           className="block rounded px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground"
