@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Wallet } from "lucide-react";
-import { ThemeToggle } from "./theme-toggle";
 import { MainMenu } from "./main-menu";
 import { AccountMenu } from "./account-menu";
 import { SearchDialog } from "./search-dialog";
@@ -18,9 +17,8 @@ export function SiteHeader() {
           SMARTBET
         </Link>
 
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex shrink-0 items-center gap-1">
           <SearchDialog />
-          <ThemeToggle />
 
           <Link
             to="/deposit"
