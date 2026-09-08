@@ -74,7 +74,7 @@ export function SearchDialog() {
                   }}
                   className="block border-b border-border px-4 py-3 hover:bg-muted"
                 >
-                  <p className="text-sm font-semibold">
+                  <p className="text-sm font-bold">
                     {m.home} v {m.away}
                   </p>
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">

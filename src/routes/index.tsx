@@ -337,7 +337,7 @@ function HomePage() {
                         <span className="mt-0.5 text-xs leading-none">⚽</span>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-baseline justify-between gap-2">
-                            <span className="truncate text-[11px] font-semibold text-card-foreground">
+                            <span className="truncate text-[11px] font-bold text-card-foreground">
                               {l.m.home} - {l.m.away}
                             </span>
                             <span className="shrink-0 text-[10px] text-muted-foreground">

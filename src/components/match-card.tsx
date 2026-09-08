@@ -29,11 +29,11 @@ export function MatchCard({ match, marketId }: { match: Match; marketId?: string
       >
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <p className="truncate text-sm font-semibold text-card-foreground">{match.home}</p>
+            <p className="truncate text-sm font-bold text-card-foreground">{match.home}</p>
             {match.live && <span className="text-sm font-bold tabular-nums">{match.live.homeScore}</span>}
           </div>
           <div className="flex items-center justify-between gap-2">
-            <p className="truncate text-sm font-semibold text-card-foreground">{match.away}</p>
+            <p className="truncate text-sm font-bold text-card-foreground">{match.away}</p>
             {match.live && <span className="text-sm font-bold tabular-nums">{match.live.awayScore}</span>}
           </div>
           <p className="mt-1.5 truncate text-[10px] font-medium text-muted-foreground">
