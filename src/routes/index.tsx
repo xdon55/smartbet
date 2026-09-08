@@ -252,11 +252,79 @@ function HomePage() {
 
         <div className="space-y-3">
           <SectionHead title="Big games" icon={Flame} to="/sports" />
-          <section className="overflow-hidden bg-card md:rounded-md md:border md:border-border md:shadow-[var(--shadow-card)]">
-            {featured.map((m) => (
-              <MatchCard key={m.id} match={m} marketId="1x2" />
-            ))}
-          </section>
+          <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-3 pb-1 md:px-0">
+            {featured.map((m) => {
+              const market = m.markets.find((k) => k.id === "1x2") ?? m.markets[0]!;
+              const labels = ["W1", "X", "W2"];
+              return (
+                <div
+                  key={m.id}
+                  className="w-[19rem] shrink-0 snap-start overflow-hidden rounded-lg border border-border p-3.5 shadow-[var(--shadow-card)]"
+                  style={{
+                    background:
+                      "linear-gradient(150deg, color-mix(in oklab, var(--color-card) 92%, #0b2740) 0%, var(--color-card) 55%, color-mix(in oklab, var(--color-card) 88%, #0b2740) 100%)",
+                  }}
+                >
+                  <Link
+                    to="/match/$matchId"
+                    params={{ matchId: m.id }}
+                    className="flex items-center gap-2 border-b border-border/70 pb-2.5"
+                  >
+                    <span className="text-base leading-none">⚽</span>
+                    <span className="text-sm leading-none">{flagFor(m.country)}</span>
+                    <span className="truncate text-xs font-semibold text-muted-foreground">
+                      {m.league}
+                    </span>
+                  </Link>
+
+                  <div className="grid grid-cols-3 items-center gap-2 py-3.5">
+                    <p className="truncate text-center text-xs font-bold text-card-foreground">
+                      {m.home}
+                    </p>
+                    <p className="text-center text-[11px] font-semibold leading-tight text-muted-foreground">
+                      {m.startsAt}
+                    </p>
+                    <p className="truncate text-center text-xs font-bold text-card-foreground">
+                      {m.away}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {market.outcomes.slice(0, 3).map((o, idx) => {
+                      const id = `${m.id}-${market.id}-${o.id}`;
+                      const active = has(id);
+                      return (
+                        <button
+                          key={o.id}
+                          type="button"
+                          onClick={() =>
+                            toggle({
+                              id,
+                              matchId: m.id,
+                              match: `${m.home} v ${m.away}`,
+                              market: market.name,
+                              pick: o.label,
+                              odds: o.odds,
+                            })
+                          }
+                          className={`flex h-12 flex-col items-center justify-center rounded-md text-[10px] font-semibold transition-colors ${
+                            active
+                              ? "bg-odds-active text-odds-active-foreground"
+                              : "bg-odds text-odds-foreground hover:bg-odds-hover"
+                          }`}
+                        >
+                          <span className="opacity-70">{labels[idx] ?? o.label}</span>
+                          <span className="text-sm font-bold tabular-nums">
+                            {o.odds.toFixed(2)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <div className="space-y-3">
@@ -273,50 +341,76 @@ function HomePage() {
               return (
                 <div
                   key={c.id}
-                  className="flex w-72 shrink-0 flex-col rounded-md border border-border bg-card p-4 shadow-[var(--shadow-card)]"
+                  className="relative flex w-[21rem] shrink-0 flex-col overflow-hidden rounded-lg border border-border p-4 shadow-[var(--shadow-card)] md:w-[24rem]"
+                  style={{
+                    background:
+                      "radial-gradient(120% 140% at 85% 0%, color-mix(in oklab, var(--color-card) 78%, #1d4ed8) 0%, var(--color-card) 55%), linear-gradient(160deg, color-mix(in oklab, var(--color-card) 90%, #0b2740) 0%, var(--color-card) 70%)",
+                  }}
                 >
-                  <p className="font-display text-sm font-semibold text-card-foreground">{c.name}</p>
-                  <ul className="mt-2 flex-1 space-y-1.5">
+                  <span className="absolute right-0 top-3 rounded-l-md bg-[#f5b800] px-2 py-0.5 text-[10px] font-bold text-[#031627]">
+                    + 7% BONUS
+                  </span>
+                  <p className="pr-20 font-display text-sm font-semibold text-card-foreground">
+                    {c.name}
+                  </p>
+                  <ul className="mt-3 flex-1 space-y-2.5 border-t border-border/60 pt-3">
                     {legs.map((l) => (
-                      <li key={l.m.id} className="text-[11px] leading-snug text-muted-foreground">
-                        <span className="font-semibold text-card-foreground">
-                          {l.m.home} v {l.m.away}
-                        </span>
-                        <br />
-                        {l.market.name} · {l.outcome.label} @ {l.outcome.odds.toFixed(2)}
+                      <li key={l.m.id} className="flex items-start gap-2">
+                        <span className="mt-0.5 text-xs leading-none">⚽</span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="truncate text-[11px] font-semibold text-card-foreground">
+                              {l.m.home} - {l.m.away}
+                            </span>
+                            <span className="shrink-0 text-[10px] text-muted-foreground">
+                              {l.m.startsAt}
+                            </span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="truncate text-[10px] text-muted-foreground">
+                              {l.market.name} - {l.outcome.label}
+                            </span>
+                            <span className="shrink-0 text-[11px] font-bold tabular-nums text-card-foreground">
+                              {l.outcome.odds.toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-3 flex items-center justify-between">
-                    <span className="text-xs font-semibold text-muted-foreground">
+                  <div className="mt-3 flex items-center justify-between border-t border-border/60 pt-3">
+                    <span className="text-[11px] font-semibold text-muted-foreground">
+                      {legs.length} events
+                    </span>
+                    <span className="text-[11px] font-semibold text-muted-foreground">
                       Total odds{" "}
-                      <span className="text-base font-bold tabular-nums text-accent">
+                      <span className="text-base font-bold tabular-nums text-[#f5b800]">
                         {total.toFixed(2)}
                       </span>
                     </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        legs.forEach((l) =>
-                          toggle({
-                            id: `${l.m.id}-${l.market.id}-${l.outcome.id}`,
-                            matchId: l.m.id,
-                            match: `${l.m.home} v ${l.m.away}`,
-                            market: l.market.name,
-                            pick: l.outcome.label,
-                            odds: l.outcome.odds,
-                          }),
-                        )
-                      }
-                      className={`h-9 rounded-md px-3 text-xs font-semibold transition-colors ${
-                        active
-                          ? "bg-odds-active text-odds-active-foreground"
-                          : "bg-accent text-accent-foreground"
-                      }`}
-                    >
-                      {active ? "In slip" : "Add combo"}
-                    </button>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      legs.forEach((l) =>
+                        toggle({
+                          id: `${l.m.id}-${l.market.id}-${l.outcome.id}`,
+                          matchId: l.m.id,
+                          match: `${l.m.home} v ${l.m.away}`,
+                          market: l.market.name,
+                          pick: l.outcome.label,
+                          odds: l.outcome.odds,
+                        }),
+                      )
+                    }
+                    className={`mt-3 h-10 rounded-md text-xs font-semibold transition-colors ${
+                      active
+                        ? "bg-odds-active text-odds-active-foreground"
+                        : "bg-accent text-accent-foreground"
+                    }`}
+                  >
+                    {active ? "In slip" : "Add combo"}
+                  </button>
                 </div>
               );
             })}
@@ -325,12 +419,12 @@ function HomePage() {
 
         <div className="space-y-3">
           <SectionHead title="Trending" icon={Sparkles} to="/casino" />
-          <div className="grid grid-cols-2 gap-3 px-3 sm:grid-cols-3 md:grid-cols-4 md:px-0">
+          <div className="no-scrollbar flex gap-3 overflow-x-auto px-3 pb-1 md:px-0">
             {topGames.map((g) => (
               <Link
                 key={g.id}
                 to={g.category === "casino" ? "/casino" : g.category === "aviator" ? "/aviator" : "/crash"}
-                className="group overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-accent/60"
+                className="group w-40 shrink-0 overflow-hidden rounded-md border border-border bg-card transition-colors hover:border-accent/60"
               >
                 <div
                   className="relative flex h-24 items-end p-2.5"
@@ -356,6 +450,7 @@ function HomePage() {
             ))}
           </div>
         </div>
+
       </div>
 
       <BetSlip />
