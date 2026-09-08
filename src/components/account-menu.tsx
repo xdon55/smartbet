@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { formatUgx } from "@/lib/betting-data";
+import { ThemeToggle } from "./theme-toggle";
 
 const links = [
   { to: "/deposit" as const, label: "Deposit", icon: ArrowDownToLine },
@@ -65,6 +66,10 @@ export function AccountMenu() {
             <Settings className="h-4 w-4 text-muted-foreground" />
             Settings
           </button>
+          <div className="flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-semibold">
+            <span>Appearance</span>
+            <ThemeToggle className="text-foreground hover:bg-muted" />
+          </div>
         </nav>
       </SheetContent>
     </Sheet>
