@@ -56,8 +56,8 @@ function Index() {
   const list = filterMatches(base, filters);
 
   return (
-    <main className="relative mx-auto flex max-w-5xl items-start gap-5 px-0 py-4 md:h-[calc(100dvh-7.5rem)] md:overflow-hidden md:px-3 md:py-5">
-      <div className="min-w-0 flex-1 space-y-4 md:h-full md:overflow-y-auto">
+    <main className="relative mx-auto flex max-w-5xl gap-5 px-0 py-4 md:px-3 md:py-5 md:h-[calc(100vh-7.5rem)] md:overflow-hidden">
+      <div className="min-w-0 flex-1 space-y-4 md:mr-[21.25rem] md:h-full md:overflow-y-auto md:py-5">
         <section className="no-scrollbar flex gap-3 overflow-x-auto px-3 md:px-0">
           {promos.map((p) => (
             <div
