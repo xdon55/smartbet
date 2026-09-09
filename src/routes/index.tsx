@@ -193,8 +193,8 @@ function HomePage() {
   const topGames = [...casinoGames].sort((a, b) => b.popularity - a.popularity).slice(0, 8);
 
   return (
-    <main className="mx-auto flex max-w-5xl gap-5 px-0 py-4 md:px-3 md:py-5">
-      <div className="min-w-0 flex-1 space-y-6">
+    <main className="relative mx-auto flex max-w-5xl gap-5 px-0 py-4 md:px-3 md:py-5 md:h-[calc(100vh-7.5rem)] md:overflow-hidden">
+      <div className="min-w-0 flex-1 space-y-6 md:mr-[21.25rem] md:h-full md:overflow-y-auto md:py-5">
         <BannerSlider />
 
 

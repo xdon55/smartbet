@@ -6,14 +6,14 @@ import { formatUgx } from "@/lib/betting-data";
 
 const quickStakes = [1000, 2000, 5000, 10000];
 
-function SlipBody({ fullscreen = false }: { fullscreen?: boolean }) {
+function SlipBody() {
   const { selections, remove, clear, stake, setStake, totalOdds, potentialWin, placeBet } =
     useBetSlip();
   const [bookingCode, setBookingCode] = useState<string | null>(null);
 
   if (!selections.length) {
     return (
-      <div className="flex flex-col items-center gap-2 px-6 py-12 text-center">
+      <div className="flex h-full flex-col items-center justify-center gap-2 px-6 py-12 text-center">
         <Ticket className="h-8 w-8 text-muted-foreground" />
         <p className="text-sm font-semibold">Your bet slip is empty</p>
         <p className="text-xs text-muted-foreground">Tap any odds to add a selection.</p>
@@ -22,7 +22,7 @@ function SlipBody({ fullscreen = false }: { fullscreen?: boolean }) {
   }
 
   return (
-    <div className={`flex flex-col ${fullscreen ? "h-full" : ""}`}>
+    <div className="flex h-full flex-col">
 
       <div className="flex items-center justify-between border-b border-border px-4 py-2">
         <p className="text-sm font-bold">{selections.length} selections</p>
@@ -35,7 +35,7 @@ function SlipBody({ fullscreen = false }: { fullscreen?: boolean }) {
         </button>
       </div>
 
-      <div className={fullscreen ? "flex-1 overflow-y-auto" : ""}>
+      <div className="flex-1 overflow-y-auto">
         {selections.map((s) => (
           <div key={s.id} className="flex items-start gap-3 border-b border-border px-4 py-3">
             <div className="min-w-0 flex-1">
@@ -142,11 +142,13 @@ export function BetSlip() {
   return (
     <>
       {/* Desktop docked slip */}
-      <aside className="sticky top-20 hidden h-fit w-80 shrink-0 overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:block">
+      <aside className="absolute right-0 top-0 hidden h-full w-80 shrink-0 flex-col overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:flex">
         <div className="brand-gradient border-b border-surface-foreground/10 px-4 py-3 font-display text-sm font-semibold text-surface-foreground">
           Bet slip
         </div>
-        <SlipBody />
+        <div className="min-h-0 flex-1 overflow-hidden">
+          <SlipBody />
+        </div>
       </aside>
 
       {/* Mobile floating bar */}
@@ -175,8 +177,8 @@ export function BetSlip() {
               <X className="h-5 w-5" />
             </button>
           </div>
-          <div className="min-h-0 flex-1">
-            <SlipBody fullscreen />
+          <div className="min-h-0 flex-1 overflow-hidden">
+            <SlipBody />
           </div>
         </div>
       )}
