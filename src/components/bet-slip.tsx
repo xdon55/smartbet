@@ -142,7 +142,7 @@ export function BetSlip() {
   return (
     <>
       {/* Desktop docked slip */}
-      <aside className="relative hidden w-80 shrink-0 flex-col self-start overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:flex md:mt-3">
+      <aside className="relative hidden w-80 shrink-0 flex-col self-start overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:sticky md:top-[7.5rem] md:flex md:h-[calc(100dvh-8.25rem)]">
         <div className="brand-gradient border-b border-surface-foreground/10 px-4 py-3 font-display text-sm font-semibold text-surface-foreground">
           Bet slip
         </div>
