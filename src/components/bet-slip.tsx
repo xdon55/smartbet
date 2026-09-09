@@ -142,11 +142,13 @@ export function BetSlip() {
   return (
     <>
       {/* Desktop docked slip */}
-      <aside className="sticky top-20 hidden h-fit w-80 shrink-0 overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:block">
+      <aside className="absolute right-0 top-0 hidden h-full w-80 shrink-0 flex-col overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:flex">
         <div className="brand-gradient border-b border-surface-foreground/10 px-4 py-3 font-display text-sm font-semibold text-surface-foreground">
           Bet slip
         </div>
-        <SlipBody />
+        <div className="min-h-0 flex-1 overflow-hidden">
+          <SlipBody />
+        </div>
       </aside>
 
       {/* Mobile floating bar */}
@@ -175,8 +177,8 @@ export function BetSlip() {
               <X className="h-5 w-5" />
             </button>
           </div>
-          <div className="min-h-0 flex-1">
-            <SlipBody fullscreen />
+          <div className="min-h-0 flex-1 overflow-hidden">
+            <SlipBody />
           </div>
         </div>
       )}
