@@ -31,7 +31,7 @@ function LivePage() {
           <section className="overflow-hidden md:rounded-lg md:border md:border-border">
             <h1 className="flex items-center gap-2 bg-secondary px-3 py-2 font-display text-sm font-bold uppercase tracking-wide text-secondary-foreground">
               <span className="h-2 w-2 animate-pulse rounded-full bg-live" /> Live betting
-              <span className="ml-auto text-xs opacity-70">{live.length} events</span>
+              <span className="ml-auto text-xs opacity-70">{live.length}&nbsp;GAMES</span>
             </h1>
             {live.map((m) => (
               <MatchCard key={m.id} match={m} />
