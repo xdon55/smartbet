@@ -35,7 +35,7 @@ function SlipBody() {
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto hover-scrollbar">
         {selections.map((s) => (
           <div key={s.id} className="flex items-start gap-3 border-b border-border px-4 py-3">
             <div className="min-w-0 flex-1">
@@ -142,7 +142,7 @@ export function BetSlip() {
   return (
     <>
       {/* Desktop docked slip */}
-      <aside className="absolute right-0 top-0 hidden h-full w-80 shrink-0 flex-col overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:flex">
+      <aside className="hidden h-full min-w-0 flex-col overflow-hidden rounded-md border border-border bg-card shadow-[var(--shadow-card)] md:flex">
         <div className="brand-gradient border-b border-surface-foreground/10 px-4 py-3 font-display text-sm font-semibold text-surface-foreground">
           Bet slip
         </div>
