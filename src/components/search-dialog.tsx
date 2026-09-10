@@ -39,7 +39,7 @@ export function SearchDialog() {
         <div className="fixed inset-0 z-[60] flex flex-col bg-background">
           {/* Search header bar */}
           <div className="brand-gradient border-b border-surface-foreground/10 px-3 py-3">
-            <div className="mx-auto flex max-w-5xl items-center gap-2">
+            <div className="mx-auto flex w-full max-w-[906px] items-center gap-2">
               <button
                 type="button"
                 aria-label="Back"
