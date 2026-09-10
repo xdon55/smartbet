@@ -8,7 +8,7 @@ import { formatUgx } from "@/lib/betting-data";
 export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 brand-gradient text-surface-foreground">
-      <div className="mx-auto flex h-16 max-w-5xl items-center gap-2 px-3">
+      <div className="mx-auto flex h-16 w-full max-w-[906px] items-center gap-2 px-3">
         <MainMenu />
         <Link
           to="/"

@@ -42,7 +42,7 @@ function MatchDetail() {
   const markets = detailMarkets(match);
 
   return (
-    <main className="relative mx-auto flex max-w-5xl gap-4 px-0 py-3 md:px-3 md:h-[calc(100vh-7.5rem)] md:overflow-hidden">
+    <main className="relative mx-auto flex w-full max-w-[906px] gap-4 px-0 py-3 md:px-3 md:h-[calc(100vh-7.5rem)] md:overflow-hidden">
       <div className="min-w-0 flex-1 space-y-3 md:mr-[21rem] md:h-full md:overflow-y-auto md:py-3">
         <section className="brand-gradient px-3 py-4 text-surface-foreground md:rounded-lg">
           <Link to="/" className="mb-3 inline-flex items-center gap-1 text-xs font-semibold opacity-80">
