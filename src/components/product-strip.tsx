@@ -16,7 +16,7 @@ export function ProductStrip() {
   return (
     <>
       <div className="no-scrollbar fixed inset-x-0 top-16 z-30 overflow-x-auto border-b border-border bg-card">
-        <div className="mx-auto flex w-full max-w-[906px] gap-1 px-3 py-2.5">
+        <div className="mx-auto flex w-full max-w-[968px] gap-1 px-3 py-2.5">
           {products.map((p) =>
             p.to ? (
               <Link
