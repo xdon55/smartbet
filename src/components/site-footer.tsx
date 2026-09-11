@@ -32,7 +32,7 @@ const info = [
 export function SiteFooter() {
   return (
     <footer className="mt-6 border-t border-border bg-card">
-      <div className="mx-auto grid w-full max-w-[906px] gap-6 px-4 py-8 sm:grid-cols-3">
+      <div className="mx-auto grid w-full max-w-[968px] gap-6 px-4 py-8 sm:grid-cols-3">
         <div>
           <p className="font-display text-xl font-bold leading-none">SMARTBET</p>
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
@@ -87,7 +87,7 @@ export function SiteFooter() {
       </div>
 
       <div className="border-t border-border px-4 py-4">
-        <p className="mx-auto w-full max-w-[906px] text-[11px] leading-relaxed text-muted-foreground">
+        <p className="mx-auto w-full max-w-[968px] text-[11px] leading-relaxed text-muted-foreground">
           You must be 25 years or older to open an account and place a bet. Gambling can be
           addictive — please play responsibly and only stake what you can afford to lose. Odds and
           markets shown are for demonstration purposes.

@@ -49,7 +49,7 @@ export function GameLobby({
   };
 
   return (
-    <main className="mx-auto w-full max-w-[906px] px-3 py-3">
+    <main className="mx-auto w-full max-w-[968px] px-3 py-3">
       <section className="overflow-hidden rounded-lg border border-border bg-card">
         <div className="flex flex-wrap items-center gap-3 bg-secondary px-3 py-3 text-secondary-foreground">
           <div className="min-w-0">

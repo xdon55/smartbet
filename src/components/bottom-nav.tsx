@@ -14,7 +14,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-surface-foreground/10 bg-surface md:hidden">
-      <div className="mx-auto grid w-full max-w-[906px] grid-cols-6">
+      <div className="mx-auto grid w-full max-w-[968px] grid-cols-6">
         {items.map((item) => (
           <Link
             key={item.to}
