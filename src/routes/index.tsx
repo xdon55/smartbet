@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ChevronLeft,
@@ -7,6 +7,7 @@ import {
   Layers,
   Radio,
   Sparkles,
+  Volleyball,
   Trophy,
   Users,
 } from "lucide-react";
@@ -180,6 +181,53 @@ function SectionHead({
         <Link to={to} className="text-xs font-semibold text-accent">
           See all
         </Link>
+      )}
+    </div>
+  );
+}
+
+const PAGE_SIZE = 5;
+
+function SportsGamesSection() {
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const sportMatches = [...matches]
+    .sort((a, b) => Number(b.sport === "Football") - Number(a.sport === "Football"))
+    .sort((a, b) => Number(b.popular) - Number(a.popular));
+  const shown = sportMatches.slice(0, visible);
+  const hasMore = visible < sportMatches.length;
+
+  useEffect(() => {
+    if (!hasMore) return;
+    const el = sentinelRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        setVisible((v) => Math.min(v + PAGE_SIZE, sportMatches.length));
+      }
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [hasMore, sportMatches.length]);
+
+  return (
+    <div className="space-y-3">
+      <SectionHead title="Sports" icon={Volleyball} to="/sports" />
+      <section className="overflow-hidden bg-card md:rounded-md md:border md:border-border md:shadow-[var(--shadow-card)]">
+        {shown.map((m) => (
+          <MatchCard key={m.id} match={m} />
+        ))}
+      </section>
+      {hasMore && (
+        <div ref={sentinelRef} className="flex justify-center px-3 md:px-0">
+          <button
+            type="button"
+            onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, sportMatches.length))}
+            className="h-10 w-full rounded-md border border-border bg-card text-xs font-semibold text-card-foreground transition-colors hover:border-accent/60 hover:text-accent"
+          >
+            More games
+          </button>
+        </div>
       )}
     </div>
   );
@@ -394,6 +442,8 @@ function HomePage() {
             })}
           </div>
         </div>
+
+        <SportsGamesSection />
 
         <div className="space-y-3">
           <SectionHead title="Trending" icon={Sparkles} to="/casino" />
