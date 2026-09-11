@@ -109,7 +109,7 @@ function BannerSlider() {
   return (
     <section className="px-3 md:px-0">
       <div
-        className="relative overflow-hidden rounded-lg border border-surface-foreground/10 p-5 text-surface-foreground shadow-[var(--shadow-card)] md:p-7"
+        className="relative overflow-hidden rounded-lg border border-surface-foreground/10 px-5 pb-5 pt-0 text-surface-foreground shadow-[var(--shadow-card)] md:px-7 md:pb-7 md:pt-0"
         style={{ background: b.gradient }}
       >
         <p className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
