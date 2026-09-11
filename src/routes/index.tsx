@@ -107,9 +107,9 @@ function BannerSlider() {
   const b = banners[i]!;
 
   return (
-    <section className="px-3 md:px-0">
+    <section>
       <div
-        className="relative flex max-h-[min(360px,45vh)] flex-col overflow-hidden rounded-lg border border-surface-foreground/10 px-5 pb-5 pt-0 text-surface-foreground shadow-[var(--shadow-card)] md:px-7 md:pb-7 md:pt-0"
+        className="relative flex h-[24vh] flex-col overflow-hidden rounded-lg border border-surface-foreground/10 text-surface-foreground shadow-[var(--shadow-card)]"
         style={{ background: b.gradient }}
       >
         <p className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-accent">
