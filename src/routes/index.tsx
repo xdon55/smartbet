@@ -443,6 +443,8 @@ function HomePage() {
           </div>
         </div>
 
+        <SportsGamesSection />
+
         <div className="space-y-3">
           <SectionHead title="Trending" icon={Sparkles} to="/casino" />
           <div className="no-scrollbar flex gap-3 overflow-x-auto px-3 pb-1 md:px-0">
