@@ -1,25 +1,46 @@
+/**
+ * betslip.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * GLOBAL BET SLIP STATE (React context).
+ *
+ * This is the heart of the betting flow:
+ *   MatchCard / detail page  →  toggle(Selection)  →  BetSlip UI  →  placeBet()
+ *
+ * INTEGRATION NOTES:
+ * - `placeBet()` currently records bets locally in state. Replace its body
+ *   with a call to your bet-placement API, then refresh `bets` from the
+ *   backend (or keep the optimistic prepend).
+ * - Selection ids are `${matchId}-${marketId}-${outcomeId}` — stable keys that
+ *   let the UI highlight active odds buttons via `has(id)`.
+ * - One pick per (match, market): adding another outcome of the same market
+ *   on the same match replaces the previous one.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
+/** One leg on the slip. `id` must be unique per match+market+outcome. */
 export type Selection = {
   id: string;
   matchId: string;
-  match: string;
-  market: string;
-  pick: string;
+  match: string; // display name, e.g. "Arsenal v Liverpool"
+  market: string; // display name, e.g. "1X2"
+  pick: string; // display label, e.g. "1"
   odds: number;
 };
 
+/** A submitted bet ("receipt") shown on the My Bets pages. */
 export type PlacedBet = {
   id: string;
-  code: string;
+  code: string; // booking-style reference shown to the user
   placedAt: string;
-  stake: number;
-  totalOdds: number;
-  potential: number;
+  stake: number; // UGX
+  totalOdds: number; // combined accumulator odds
+  potential: number; // potential payout in UGX
   status: "open" | "won" | "lost";
   selections: Selection[];
 };
 
+/** Everything the context exposes to consumers via useBetSlip(). */
 type BetSlipContextValue = {
   selections: Selection[];
   stake: number;
@@ -30,7 +51,7 @@ type BetSlipContextValue = {
   has: (id: string) => boolean;
   totalOdds: number;
   potentialWin: number;
-  open: boolean;
+  open: boolean; // mobile fullscreen slip visibility
   setOpen: (v: boolean) => void;
   bets: PlacedBet[];
   placeBet: () => PlacedBet | null;
@@ -38,6 +59,10 @@ type BetSlipContextValue = {
 
 const BetSlipContext = createContext<BetSlipContextValue | null>(null);
 
+/* ── Seed bet history ───────────────────────────────────────────────────────
+ * Demo receipts so My Bets isn't empty. TODO(integration): fetch the user's
+ * real bet history and drop this constant.
+ * ──────────────────────────────────────────────────────────────────────── */
 const initialBets: PlacedBet[] = [
   {
     id: "b-201",
@@ -95,12 +120,17 @@ const initialBets: PlacedBet[] = [
   },
 ];
 
+/** Provider mounted once in src/routes/__root.tsx around the whole app. */
 export function BetSlipProvider({ children }: { children: ReactNode }) {
   const [selections, setSelections] = useState<Selection[]>([]);
-  const [stake, setStake] = useState(2000);
+  const [stake, setStake] = useState(2000); // default stake in UGX
   const [open, setOpen] = useState(false);
   const [bets, setBets] = useState<PlacedBet[]>(initialBets);
 
+  /**
+   * Add/remove a selection. Tapping the same odds button again removes it;
+   * tapping a different outcome in the same market on the same match swaps it.
+   */
   const toggle = useCallback((s: Selection) => {
     setSelections((prev) => {
       if (prev.some((p) => p.id === s.id)) return prev.filter((p) => p.id !== s.id);
@@ -114,6 +144,7 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
 
   const clear = useCallback(() => setSelections([]), []);
 
+  // Accumulator odds: multiply all leg odds (empty slip = 1).
   const totalOdds = useMemo(
     () => selections.reduce((acc, s) => acc * s.odds, 1),
     [selections],
@@ -121,6 +152,11 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
 
   const potentialWin = selections.length ? Math.round(stake * totalOdds) : 0;
 
+  /**
+   * Submits the current slip as a bet. Uses a functional state update so it
+   * always reads the latest selections. TODO(integration): POST to the bets
+   * API here; handle insufficient balance / rejected legs from the response.
+   */
   const placeBet = useCallback(() => {
     let placed: PlacedBet | null = null;
     setSelections((current) => {
@@ -137,9 +173,9 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
         selections: current,
       };
       setBets((prev) => [placed as PlacedBet, ...prev]);
-      return [];
+      return []; // empty the slip after placing
     });
-    setOpen(false);
+    setOpen(false); // close the mobile fullscreen slip
     return placed;
   }, [stake]);
 
@@ -162,6 +198,7 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
   return <BetSlipContext.Provider value={value}>{children}</BetSlipContext.Provider>;
 }
 
+/** Hook for all bet slip reads/writes. Must be used under BetSlipProvider. */
 export function useBetSlip() {
   const ctx = useContext(BetSlipContext);
   if (!ctx) throw new Error("useBetSlip must be used inside BetSlipProvider");
