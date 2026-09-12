@@ -1,13 +1,38 @@
+/**
+ * betting-data.ts
+ * ─────────────────────────────────────────────────────────────────────────────
+ * CENTRAL MOCK DATA SOURCE for the sportsbook.
+ *
+ * INTEGRATION NOTES (odds providers):
+ * - Replace the exported arrays (`matches`, `sports`, etc.) with data fetched
+ *   from your odds/feed provider. Keep the exported TYPE SHAPES identical and
+ *   the whole UI keeps working without component changes.
+ * - Every screen reads from this module: home, sports, live, match detail,
+ *   search, menus and the bet slip.
+ * - `formatUgx` is the single currency formatter — reuse it everywhere money
+ *   is displayed.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/** A single selectable price inside a market (e.g. "1" @ 2.05). */
 export type Outcome = { id: string; label: string; odds: number };
 
+/** A betting market attached to a match (e.g. 1X2, Total goals 2.5). */
 export type Market = {
   id: string;
   name: string;
   outcomes: Outcome[];
 };
 
+/** Kickoff buckets used by the "kickoff time" filter on the sports page. */
 export type KickoffDay = "today" | "tomorrow" | "day-after" | "this-week";
 
+/**
+ * A fixture/event. `live` is optional — when present the event is treated as
+ * in-play everywhere (live badge, score, /live page). `markets` holds the
+ * prices shown on cards; `marketCount` is the provider's total market count
+ * shown on the "+N" button.
+ */
 export type Match = {
   id: string;
   sport: string;
@@ -23,6 +48,12 @@ export type Match = {
   markets: Market[];
 };
 
+/* ── Market builder helpers ─────────────────────────────────────────────────
+ * Small factories so mock fixtures stay readable. When wiring a real feed,
+ * map provider markets into the same { id, name, outcomes[] } shape instead.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+/** Classic 1X2 (home/draw/away) market. */
 const oneX2 = (h: number, d: number, a: number): Market => ({
   id: "1x2",
   name: "1X2",
@@ -33,6 +64,7 @@ const oneX2 = (h: number, d: number, a: number): Market => ({
   ],
 });
 
+/** Over/Under 2.5 goals market. */
 const goals = (over: number, under: number): Market => ({
   id: "ou25",
   name: "Total goals 2.5",
@@ -42,6 +74,7 @@ const goals = (over: number, under: number): Market => ({
   ],
 });
 
+/** Both teams to score market. */
 const btts = (yes: number, no: number): Market => ({
   id: "btts",
   name: "Both teams to score",
@@ -51,6 +84,7 @@ const btts = (yes: number, no: number): Market => ({
   ],
 });
 
+/** Two-way winner market (basketball, tennis, etc.). */
 const winner = (h: number, a: number): Market => ({
   id: "ml",
   name: "Winner",
@@ -60,6 +94,10 @@ const winner = (h: number, a: number): Market => ({
   ],
 });
 
+/* ── Mock fixtures ──────────────────────────────────────────────────────────
+ * TODO(integration): replace with a live odds feed. The UI filters by
+ * `sport`, `league`, `country`, `day` and `live` — keep those fields accurate.
+ * ──────────────────────────────────────────────────────────────────────── */
 export const matches: Match[] = [
   {
     id: "m1",
@@ -216,6 +254,9 @@ export const matches: Match[] = [
   },
 ];
 
+/* ── Filter option lists ────────────────────────────────────────────────────
+ * Drive the sport/league/market/kickoff dropdowns on the sports page.
+ * ──────────────────────────────────────────────────────────────────────── */
 export const sports = [
   { id: "football", name: "Football", count: 1284 },
   { id: "basketball", name: "Basketball", count: 212 },
@@ -227,6 +268,7 @@ export const sports = [
   { id: "boxing", name: "Boxing", count: 12 },
 ];
 
+/** Kickoff-time filter chips ("All", "Today", ...). */
 export const kickoffOptions: { id: KickoffDay | "all"; label: string }[] = [
   { id: "all", label: "All" },
   { id: "today", label: "Today" },
@@ -235,6 +277,7 @@ export const kickoffOptions: { id: KickoffDay | "all"; label: string }[] = [
   { id: "this-week", label: "This week" },
 ];
 
+/** Market filter options — ids must match the market ids used in fixtures. */
 export const marketOptions = [
   { id: "1x2", name: "1X2" },
   { id: "ou25", name: "Total goals 2.5" },
@@ -242,6 +285,7 @@ export const marketOptions = [
   { id: "ml", name: "Winner" },
 ];
 
+/** Country → leagues tree rendered in the left slide-in main menu. */
 export const countriesWithLeagues = [
   { country: "Uganda", leagues: ["Uganda Premier League", "Uganda Big League"] },
   { country: "England", leagues: ["Premier League", "Championship", "FA Cup"] },
@@ -253,9 +297,14 @@ export const countriesWithLeagues = [
   { country: "USA", leagues: ["NBA", "MLS"] },
 ];
 
+/** Derived lookup lists (unique leagues / countries present in fixtures). */
 export const allLeagues = Array.from(new Set(matches.map((m) => m.league))).sort();
 export const allCountries = Array.from(new Set(matches.map((m) => m.country))).sort();
 
+/* ── Country flags ──────────────────────────────────────────────────────────
+ * Emoji flags keyed by country name. TODO(integration): swap for flag
+ * sprites/SVGs if the design system requires crisp icons.
+ * ──────────────────────────────────────────────────────────────────────── */
 export const countryFlags: Record<string, string> = {
   Uganda: "🇺🇬",
   England: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
@@ -269,9 +318,14 @@ export const countryFlags: Record<string, string> = {
   Tanzania: "🇹🇿",
 };
 
+/** Flag lookup with a neutral fallback for unmapped countries. */
 export const flagFor = (country: string) => countryFlags[country] ?? "🏳️";
 
-/** Extra mock markets shown on a game detail page. */
+/**
+ * Extra mock markets shown on the match detail page (/match/:id).
+ * Football gets the full set; other sports only get "Draw no bet" on top of
+ * their base markets. Replace with provider market data per event.
+ */
 export function detailMarkets(match: Match): Market[] {
   const base = match.markets;
   const extras: Market[] = [
@@ -333,6 +387,7 @@ export function detailMarkets(match: Match): Market[] {
   return match.sport === "Football" ? [...base, ...extras] : [...base, extras[3]!];
 }
 
+/** Single currency formatter for the whole app — always display money via this. */
 export const formatUgx = (value: number) =>
   new Intl.NumberFormat("en-UG", {
     style: "currency",
