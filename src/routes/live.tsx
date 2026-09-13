@@ -1,3 +1,9 @@
+/**
+ * routes/live.tsx — LIVE betting page.
+ * Renders every fixture whose `live` field is set (lib/betting-data.ts).
+ * Same 60/40 two-column layout as the sports page: matches scroll on the
+ * left, the bet slip stays put on the right.
+ */
 import { createFileRoute } from "@tanstack/react-router";
 import { matches } from "@/lib/betting-data";
 import { MatchCard } from "@/components/match-card";

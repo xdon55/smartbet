@@ -1,3 +1,10 @@
+/**
+ * site-footer.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Site-wide footer: link columns, social icons, and the responsible-gaming
+ * notice (players must be 25+). Update legal/licensing copy before launch.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram, Send, Twitter, Youtube } from "lucide-react";
 

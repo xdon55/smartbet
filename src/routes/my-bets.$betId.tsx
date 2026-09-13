@@ -1,3 +1,8 @@
+/**
+ * routes/my-bets.$betId.tsx — BET RECEIPT detail page (/my-bets/:betId).
+ * Shows every leg of one placed bet plus stake/odds/payout summary.
+ * Reads from the bet slip context; replace with a bet-by-id API fetch.
+ */
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useBetSlip } from "@/lib/betslip";

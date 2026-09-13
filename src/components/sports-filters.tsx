@@ -1,3 +1,11 @@
+/**
+ * sports-filters.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Filter bar for the sports page: sport / league / market dropdowns plus
+ * kickoff-time chips. `filterMatches()` applies a SportsFilterState to a
+ * fixture list — keep it in sync with the Match type in lib/betting-data.ts.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import {
   Select,
   SelectContent,

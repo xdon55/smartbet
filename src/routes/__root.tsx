@@ -1,3 +1,11 @@
+/**
+ * routes/__root.tsx — ROOT LAYOUT.
+ * Mounts global providers (React Query, BetSlipProvider), the fixed header,
+ * product strip, footer, mobile bottom nav and the toast host. Also defines
+ * the default SEO metadata, fonts, favicon, and a pre-paint theme script
+ * that reads "smartbet-theme" from localStorage before hydration.
+ * Child routes render through <Outlet /> — do not remove it.
+ */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,

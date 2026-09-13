@@ -1,3 +1,11 @@
+/**
+ * routes/index.tsx — HOME page.
+ * Promotional slideshow banner, top leagues carousel, "Big games" match
+ * carousel, "Multiple of the day" combo cards (Add to Betslip pushes all
+ * legs into the slip), a football-first sports games list (5 at a time,
+ * more via button or scroll), and one row of trending casino/crash games.
+ * All content is mock data from lib/betting-data.ts and lib/casino-data.ts.
+ */
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {

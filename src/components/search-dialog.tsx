@@ -1,3 +1,12 @@
+/**
+ * search-dialog.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Header search. Clicking the icon opens a fullscreen top search bar with a
+ * back arrow and live results over the mock fixtures (teams, leagues,
+ * countries). Results link to the match detail page. When a real feed is
+ * connected, swap the local filter for a search API call.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Search, X } from "lucide-react";

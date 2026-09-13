@@ -1,3 +1,9 @@
+/**
+ * routes/match.$matchId.tsx — MATCH DETAIL page (/match/:matchId).
+ * Header banner with fixture info plus the full market list from
+ * detailMarkets() (mock extras — replace with provider markets). Every
+ * outcome button toggles a bet slip selection. Unknown ids show a fallback.
+ */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { matches, detailMarkets, flagFor } from "@/lib/betting-data";
