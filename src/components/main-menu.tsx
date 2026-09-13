@@ -1,3 +1,11 @@
+/**
+ * main-menu.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Left slide-in navigation (hamburger in the header). Contains the product
+ * grid plus an expandable Countries & Leagues tree sourced from
+ * lib/betting-data.ts. Locks page scroll while open (fullscreen on mobile).
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown, Dice5, Gamepad2, Menu, Plane, Radio, Rocket, Spade, Trophy } from "lucide-react";
@@ -18,6 +26,7 @@ export function MainMenu() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>("Uganda");
 
+  // Hide/disable the page scrollbar while the fullscreen menu is open.
   useEffect(() => {
     if (open) {
       document.documentElement.classList.add("overflow-hidden");

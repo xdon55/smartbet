@@ -1,3 +1,7 @@
+/**
+ * routes/aviator.tsx — AVIATOR lobby. Thin wrapper around the shared
+ * GameLobby component with category="aviator". Game data: lib/casino-data.ts.
+ */
 import { createFileRoute } from "@tanstack/react-router";
 import { GameLobby } from "@/components/game-lobby";
 

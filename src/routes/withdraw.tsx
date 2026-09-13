@@ -1,3 +1,8 @@
+/**
+ * routes/withdraw.tsx — WITHDRAW page (mock UI only).
+ * Mirrors the deposit flow. Wire to the payouts API; enforce balance checks
+ * and KYC status server-side before releasing funds.
+ */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";

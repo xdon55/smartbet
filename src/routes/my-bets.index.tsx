@@ -1,3 +1,9 @@
+/**
+ * routes/my-bets.index.tsx — MY BETS list.
+ * Collapsed receipt cards (stake, total odds, potential, status) with an
+ * Open/Settled filter. Tapping a receipt opens the detail page at
+ * /my-bets/$betId. Data comes from the bet slip context (seeded mock bets).
+ */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ChevronRight, Receipt } from "lucide-react";

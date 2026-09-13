@@ -1,3 +1,11 @@
+/**
+ * account-menu.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Right slide-in account panel (wallet links, balance card, theme toggle).
+ * Balance/bonus values are hardcoded mock numbers — replace with wallet API
+ * data. Locks page scroll while open and scrolls internally on overflow.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {

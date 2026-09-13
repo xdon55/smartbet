@@ -1,3 +1,8 @@
+/**
+ * routes/auth.tsx — SIGN IN / REGISTER page (mock UI only).
+ * Form submit handlers are stubs; wire to the auth backend (registration,
+ * login, password reset, and the 25+ age declaration) when available.
+ */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";

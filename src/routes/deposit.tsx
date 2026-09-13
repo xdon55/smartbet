@@ -1,3 +1,8 @@
+/**
+ * routes/deposit.tsx — DEPOSIT page (mock UI only).
+ * Presents amount selection and mobile-money style payment options in UGX.
+ * Wire the submit flow to the payments provider (e.g. MTN/Airtel money).
+ */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";

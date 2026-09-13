@@ -1,3 +1,9 @@
+/**
+ * routes/booking-code.tsx — BOOKING CODE page (mock UI only).
+ * Lets a user load a shared bet slip from a code. Codes generated in
+ * components/bet-slip.tsx are random and not yet resolvable — wire lookup
+ * to the booking-code API so codes hydrate real selections.
+ */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";

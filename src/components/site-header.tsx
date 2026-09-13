@@ -1,3 +1,10 @@
+/**
+ * site-header.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Fixed top bar: main menu trigger, SMARTBET logo, search, wallet balance
+ * (mock amount — wire to wallet API) and the account menu trigger.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { Link } from "@tanstack/react-router";
 import { Wallet } from "lucide-react";
 import { MainMenu } from "./main-menu";

@@ -1,11 +1,25 @@
+/**
+ * bet-slip.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * The bet slip UI. Renders three variants from the same SlipBody:
+ *   1. Desktop docked sidebar (stationary column in the page grid).
+ *   2. Mobile floating summary bar (selections count, total odds, potential).
+ *   3. Mobile fullscreen overlay.
+ * State lives in lib/betslip.tsx; this component only reads/writes it.
+ * "Create booking code" generates a shareable code for the current
+ * selections; "Place bet" calls placeBet() (mock — wire to bets API).
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { useState } from "react";
 import { Trash2, X, Ticket, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useBetSlip } from "@/lib/betslip";
 import { formatUgx } from "@/lib/betting-data";
 
+/** One-tap stake shortcuts (UGX). */
 const quickStakes = [1000, 2000, 5000, 10000];
 
+/** Shared slip content: selections list, stake controls, totals, actions. */
 function SlipBody() {
   const { selections, remove, clear, stake, setStake, totalOdds, potentialWin, placeBet } =
     useBetSlip();

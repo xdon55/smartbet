@@ -1,3 +1,10 @@
+/**
+ * bottom-nav.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Fixed mobile bottom tab bar (Home, Sports, Live, Casino, My Bets).
+ * Intentionally always dark in both themes. Hidden on md+ screens.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { Link } from "@tanstack/react-router";
 import { Home, Radio, Receipt, Ticket, Dice5, Trophy } from "lucide-react";
 import { useBetSlip } from "@/lib/betslip";

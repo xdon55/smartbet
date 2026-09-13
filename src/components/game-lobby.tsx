@@ -1,3 +1,12 @@
+/**
+ * game-lobby.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Reusable game grid for the Casino / Aviator / Crash pages. Filter by
+ * provider/type/volatility, free-text search, and sort — all driven by
+ * filterAndSortGames() from lib/casino-data.ts. The "Play" button is a stub
+ * that toasts until the game provider launch integration is wired in.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { useMemo, useState } from "react";
 import { Flame, Search, Sparkles, Users } from "lucide-react";
 import { toast } from "sonner";

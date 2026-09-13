@@ -1,3 +1,8 @@
+/**
+ * routes/transactions.tsx — TRANSACTIONS page (mock UI only).
+ * Static list of deposits/withdrawals/bets. Replace with the wallet
+ * transaction history API, paginated.
+ */
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownToLine, ArrowUpFromLine, Receipt } from "lucide-react";
 import { formatUgx } from "@/lib/betting-data";

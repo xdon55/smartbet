@@ -1,3 +1,9 @@
+/**
+ * routes/sports.tsx — SPORTS book page.
+ * Upcoming / Popular / Live tabs over the mock fixtures, with sport, league,
+ * market and kickoff-time filters (components/sports-filters.tsx). Desktop
+ * uses a 60/40 grid: scrollable match list left, stationary bet slip right.
+ */
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Flame, Gift, Ticket } from "lucide-react";
