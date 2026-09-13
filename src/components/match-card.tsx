@@ -1,3 +1,13 @@
+/**
+ * match-card.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Single fixture row used on home, sports, live and search results.
+ * Shows kickoff/live badge, teams (+live score), country/league, the main
+ * market's odds buttons, and a "+N" link to the full market list.
+ * Tapping an odds button toggles a bet slip Selection (see lib/betslip.tsx).
+ * Pass `marketId` to render a different market than the match's first one.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { ChevronRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { flagFor, type Match } from "@/lib/betting-data";

@@ -1,3 +1,11 @@
+/**
+ * product-strip.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Fixed product navigation bar pinned under the header on every page.
+ * Items with `to: null` are placeholders shown with a "Soon" badge until
+ * those products (Slots, Virtuals) are built.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { Link } from "@tanstack/react-router";
 import { Dice5, Gamepad2, House, Plane, Radio, Rocket, Spade, Trophy } from "lucide-react";
 

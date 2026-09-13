@@ -1,3 +1,11 @@
+/**
+ * theme-toggle.tsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Light/dark switch. Persists the choice in localStorage under
+ * "smartbet-theme"; __root.tsx also has a pre-paint inline script reading the
+ * same key so the correct theme applies before React hydrates (no flash).
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { cn } from "@/lib/utils";
