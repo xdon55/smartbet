@@ -15,7 +15,8 @@ import { formatUgx } from "@/lib/betting-data";
 export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 brand-gradient text-surface-foreground">
-      <div className="mx-auto flex h-16 w-full max-w-[968px] items-center gap-2 px-3">
+      {/** Tight header rail so the logo and controls sit close to the edges. */}
+      <div className="mx-auto flex h-16 w-full max-w-[968px] items-center gap-1 px-1.5">
         <MainMenu />
         <Link
           to="/"
@@ -24,12 +25,12 @@ export function SiteHeader() {
           SMARTBET
         </Link>
 
-        <div className="ml-auto flex shrink-0 items-center gap-1">
+        <div className="ml-auto flex shrink-0 items-center gap-0.5">
           <SearchDialog />
 
           <Link
             to="/deposit"
-            className="ml-1 flex items-center gap-2 rounded-md bg-surface-foreground/10 px-2.5 py-1.5"
+            className="ml-1 flex items-center gap-1.5 rounded-md bg-surface-foreground/10 px-1.5 py-1"
           >
             <Wallet className="h-4 w-4 text-accent" />
             <span className="text-xs font-semibold tabular-nums">{formatUgx(48500)}</span>
