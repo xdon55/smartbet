@@ -14,16 +14,268 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: number
+          metadata: Json
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: number
+          metadata?: Json
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: number
+          metadata?: Json
+        }
+        Relationships: []
+      }
+      ledger_entries: {
+        Row: {
+          account: string
+          amount: number
+          created_at: string
+          currency: string
+          direction: string
+          id: number
+          transaction_id: string
+          wallet_id: string | null
+        }
+        Insert: {
+          account: string
+          amount: number
+          created_at?: string
+          currency?: string
+          direction: string
+          id?: number
+          transaction_id: string
+          wallet_id?: string | null
+        }
+        Update: {
+          account?: string
+          amount?: number
+          created_at?: string
+          currency?: string
+          direction?: string
+          id?: number
+          transaction_id?: string
+          wallet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ledger_entries_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ledger_entries_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_config: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          account_status: string
+          country: string
+          created_at: string
+          currency: string
+          date_of_birth: string | null
+          display_name: string | null
+          id: string
+          kyc_status: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          account_status?: string
+          country?: string
+          created_at?: string
+          currency?: string
+          date_of_birth?: string | null
+          display_name?: string | null
+          id: string
+          kyc_status?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account_status?: string
+          country?: string
+          created_at?: string
+          currency?: string
+          date_of_birth?: string | null
+          display_name?: string | null
+          id?: string
+          kyc_status?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          direction: string
+          id: string
+          idempotency_key: string
+          metadata: Json
+          reference: string | null
+          status: string
+          type: string
+          user_id: string
+          wallet_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          direction: string
+          id?: string
+          idempotency_key: string
+          metadata?: Json
+          reference?: string | null
+          status?: string
+          type: string
+          user_id: string
+          wallet_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          direction?: string
+          id?: string
+          idempotency_key?: string
+          metadata?: Json
+          reference?: string | null
+          status?: string
+          type?: string
+          user_id?: string
+          wallet_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          created_at: string
+          currency: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      wallet_balance: { Args: { _user_id: string }; Returns: number }
+      wallet_transact: {
+        Args: {
+          _amount: number
+          _counter_account: string
+          _direction: string
+          _idempotency_key: string
+          _metadata?: Json
+          _reference?: string
+          _type: string
+          _user_id: string
+        }
+        Returns: string
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "player" | "agent" | "cashier" | "trader" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +402,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["player", "agent", "cashier", "trader", "admin"],
+    },
   },
 } as const
