@@ -18,28 +18,44 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const serializableJson = z.union([
-  z.string(),
-  z.number(),
-  z.boolean(),
-  z.null(),
-  z.record(z.any()),
-  z.array(z.any()),
-]);
+export type WalletTransaction = {
+  id: string;
+  type: string;
+  status: string;
+  direction: string;
+  amount: number;
+  currency: string;
+  reference: string | null;
+  // Json metadata is kept simple and serializable for RPC returns.
+  metadata: Record<string, string | number | boolean | null>;
+  created_at: string;
+};
 
-const transactionSchema = z.object({
-  id: z.string().uuid(),
-  type: z.string(),
-  status: z.string(),
-  direction: z.string(),
-  amount: z.number(),
-  currency: z.string(),
-  reference: z.string().nullable(),
-  metadata: z.record(serializableJson),
-  created_at: z.string(),
-});
+function mapTransaction(row: Record<string, unknown>): WalletTransaction {
+  return {
+    id: String(row.id),
+    type: String(row.type),
+    status: String(row.status),
+    direction: String(row.direction),
+    amount: Number(row.amount),
+    currency: String(row.currency),
+    reference: row.reference == null ? null : String(row.reference),
+    metadata: row.metadata && typeof row.metadata === "object" && !Array.isArray(row.metadata)
+      ? (row.metadata as Record<string, unknown>)
+          .entries()
+          .reduce((acc, [k, v]) => {
+            if (typeof v === "string" || typeof v === "number" || typeof v === "boolean" || v === null) {
+              acc[k] = v;
+            } else {
+              acc[k] = JSON.stringify(v);
+            }
+            return acc;
+          }, {} as Record<string, string | number | boolean | null>)
+      : {},
+    created_at: String(row.created_at),
+  };
+}
 
-export type WalletTransaction = z.infer<typeof transactionSchema>;
 
 
 /**
