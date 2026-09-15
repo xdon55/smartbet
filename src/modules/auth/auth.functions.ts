@@ -48,7 +48,9 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
 
     if (existing) {
       // Ensure a wallet exists even if profile was created earlier.
-      await ensureWallet(supabase, userId);
+      await supabase
+        .from("wallets")
+        .upsert({ user_id: userId, currency: "UGX" }, { onConflict: "user_id" });
       return profileSchema.parse(existing);
     }
 
@@ -60,7 +62,9 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
       .single();
     if (profileError) throw new Error(profileError.message);
 
-    await ensureWallet(supabase, userId);
+    await supabase
+      .from("wallets")
+      .upsert({ user_id: userId, currency: "UGX" }, { onConflict: "user_id" });
 
     // Audit trail: account opened.
     await supabase.from("audit_log").insert({
@@ -72,16 +76,3 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
 
     return profileSchema.parse(profile);
   });
-
-async function ensureWallet(
-  supabase: { from: (table: "wallets") => { upsert: (values: Record<string, unknown>, opts: { onConflict: string }) => Promise<{ error: { message: string } | null }> } },
-  userId: string,
-) {
-  // Use an upsert so repeated calls are safe; the unique index on user_id
-  // guarantees only one wallet per user.
-  const { error } = await supabase
-    .from("wallets")
-    .upsert({ user_id: userId, currency: "UGX" }, { onConflict: "user_id" });
-  if (error) throw new Error(error.message);
-}
-
