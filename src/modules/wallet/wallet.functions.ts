@@ -18,6 +18,15 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
+const serializableJson = z.union([
+  z.string(),
+  z.number(),
+  z.boolean(),
+  z.null(),
+  z.record(z.any()),
+  z.array(z.any()),
+]);
+
 const transactionSchema = z.object({
   id: z.string().uuid(),
   type: z.string(),
@@ -26,11 +35,12 @@ const transactionSchema = z.object({
   amount: z.number(),
   currency: z.string(),
   reference: z.string().nullable(),
-  metadata: z.record(z.unknown()),
+  metadata: z.record(serializableJson),
   created_at: z.string(),
 });
 
 export type WalletTransaction = z.infer<typeof transactionSchema>;
+
 
 /**
  * Return the derived wallet balance for the signed-in user.
