@@ -13,7 +13,8 @@ import { getCurrentUserProfile, type UserProfile } from "@/modules/auth/auth.fun
 
 export function useAuth() {
   const fetchProfile = useServerFn(getCurrentUserProfile);
-  const [user, setUser] = useState<null | { id: string; email?: string }>(null);
+  const [user, setUser] = useState<null | { id: string; email: string | undefined }>(null);
+
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
