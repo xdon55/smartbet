@@ -2,8 +2,9 @@
  * account-menu.tsx
  * ─────────────────────────────────────────────────────────────────────────────
  * Right slide-in account panel (wallet links, balance card, theme toggle).
- * Balance/bonus values are hardcoded mock numbers — replace with wallet API
- * data. Locks page scroll while open and scrolls internally on overflow.
+ * Balance now comes from the server-side ledger. Locks page scroll while open
+ * and scrolls internally on overflow. Authentication links adjust to sign-in or
+ * sign-out based on the current session.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import {
   ArrowDownToLine,
   ArrowUpFromLine,
   LogIn,
+  LogOut,
   Receipt,
   Settings,
   Ticket,
@@ -19,20 +21,28 @@ import {
   Wallet,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 import { formatUgx } from "@/lib/betting-data";
 import { ThemeToggle } from "./theme-toggle";
+import { useAuth } from "@/hooks/use-auth";
+import { useWallet } from "@/hooks/use-wallet";
 
-const links = [
+const guestLinks = [
+  { to: "/auth" as const, label: "Sign in / Register", icon: LogIn },
+];
+
+const authLinks = [
   { to: "/deposit" as const, label: "Deposit", icon: ArrowDownToLine },
   { to: "/withdraw" as const, label: "Withdraw", icon: ArrowUpFromLine },
   { to: "/my-bets" as const, label: "My bets", icon: Receipt },
   { to: "/booking-code" as const, label: "Booking code", icon: Ticket },
   { to: "/transactions" as const, label: "Transactions", icon: Wallet },
-  { to: "/auth" as const, label: "Sign in / Register", icon: LogIn },
 ];
 
 export function AccountMenu() {
   const [open, setOpen] = useState(false);
+  const { isAuthenticated, user, signOut, loading: authLoading } = useAuth();
+  const { balance, loading: walletLoading } = useWallet();
 
   useEffect(() => {
     if (open) {
@@ -42,6 +52,8 @@ export function AccountMenu() {
     }
     return () => document.documentElement.classList.remove("overflow-hidden");
   }, [open]);
+
+  const links = isAuthenticated ? authLinks : guestLinks;
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -60,8 +72,12 @@ export function AccountMenu() {
           <div className="px-4 py-3">
             <div className="rounded-lg brand-gradient p-3 text-surface-foreground">
               <p className="text-xs uppercase tracking-wide opacity-80">Balance</p>
-              <p className="font-display text-2xl font-bold tabular-nums">{formatUgx(48500)}</p>
-              <p className="mt-1 text-xs opacity-80">Bonus {formatUgx(5000)}</p>
+              <p className="font-display text-2xl font-bold tabular-nums">
+                {authLoading || walletLoading ? "—" : formatUgx(balance ?? 0)}
+              </p>
+              {isAuthenticated && user?.email && (
+                <p className="mt-1 truncate text-xs opacity-80">{user.email}</p>
+              )}
             </div>
           </div>
 
@@ -84,6 +100,21 @@ export function AccountMenu() {
               <Settings className="h-4 w-4 text-muted-foreground" />
               Settings
             </button>
+
+            {isAuthenticated && (
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setOpen(false);
+                  signOut();
+                }}
+                className="flex w-full items-center justify-start gap-3 rounded-md px-3 py-2.5 text-sm font-semibold hover:bg-muted"
+              >
+                <LogOut className="h-4 w-4 text-muted-foreground" />
+                Sign out
+              </Button>
+            ))}
+
             <div className="flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-semibold">
               <span>Appearance</span>
               <ThemeToggle />
