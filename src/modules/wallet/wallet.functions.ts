@@ -94,12 +94,14 @@ export const getWalletTransactions = createServerFn({ method: "GET" })
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
+    const limit = data.limit ?? 50;
     let query = supabase
       .from("transactions")
       .select("*")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
-      .limit(data.limit);
+      .limit(limit);
+
 
     if (data.cursor) {
       // Cursor-based pagination using the created_at timestamp of the cursor row.
