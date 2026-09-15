@@ -74,20 +74,14 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
   });
 
 async function ensureWallet(
-  supabase: { from: (table: string) => unknown },
+  supabase: { from: (table: "wallets") => { upsert: (values: Record<string, unknown>, opts: { onConflict: string }) => Promise<{ error: { message: string } | null }> } },
   userId: string,
 ) {
-  const sb = supabase as { rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> };
   // Use an upsert so repeated calls are safe; the unique index on user_id
   // guarantees only one wallet per user.
-  const { error } = await (supabase as unknown as {
-    from: (table: string) => {
-      upsert: (values: Record<string, unknown>, opts?: { onConflict: string }) => {
-        error: { message: string } | null;
-      };
-    };
-  })
+  const { error } = await supabase
     .from("wallets")
     .upsert({ user_id: userId, currency: "UGX" }, { onConflict: "user_id" });
   if (error) throw new Error(error.message);
 }
+
