@@ -113,8 +113,9 @@ export const getWalletTransactions = createServerFn({ method: "GET" })
 
     const { data: rows, error } = await query;
     if (error) throw new Error(error.message);
-    return z.array(transactionSchema).parse(rows ?? []);
+    return (rows ?? []).map(mapTransaction);
   });
+
 
 /**
  * Internal test deposit: credits the wallet without an external provider.
