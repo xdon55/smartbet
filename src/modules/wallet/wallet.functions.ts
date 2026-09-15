@@ -32,29 +32,32 @@ export type WalletTransaction = {
 };
 
 function mapTransaction(row: Record<string, unknown>): WalletTransaction {
+  const meta = row["metadata"] && typeof row["metadata"] === "object" && !Array.isArray(row["metadata"])
+    ? (row["metadata"] as Record<string, unknown>)
+    : {};
+
+  const metadata: Record<string, string | number | boolean | null> = {};
+  for (const [k, v] of Object.entries(meta)) {
+    if (typeof v === "string" || typeof v === "number" || typeof v === "boolean" || v === null) {
+      metadata[k] = v;
+    } else {
+      metadata[k] = JSON.stringify(v);
+    }
+  }
+
   return {
-    id: String(row.id),
-    type: String(row.type),
-    status: String(row.status),
-    direction: String(row.direction),
-    amount: Number(row.amount),
-    currency: String(row.currency),
-    reference: row.reference == null ? null : String(row.reference),
-    metadata: row.metadata && typeof row.metadata === "object" && !Array.isArray(row.metadata)
-      ? (row.metadata as Record<string, unknown>)
-          .entries()
-          .reduce((acc, [k, v]) => {
-            if (typeof v === "string" || typeof v === "number" || typeof v === "boolean" || v === null) {
-              acc[k] = v;
-            } else {
-              acc[k] = JSON.stringify(v);
-            }
-            return acc;
-          }, {} as Record<string, string | number | boolean | null>)
-      : {},
-    created_at: String(row.created_at),
+    id: String(row["id"]),
+    type: String(row["type"]),
+    status: String(row["status"]),
+    direction: String(row["direction"]),
+    amount: Number(row["amount"]),
+    currency: String(row["currency"]),
+    reference: row["reference"] == null ? null : String(row["reference"]),
+    metadata,
+    created_at: String(row["created_at"]),
   };
 }
+
 
 
 
