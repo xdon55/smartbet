@@ -85,10 +85,12 @@ export const getWalletTransactions = createServerFn({ method: "GET" })
     z
       .object({
         cursor: z.string().uuid().optional(),
-        limit: z.number().int().min(1).max(100).default(50),
+        limit: z.number().int().min(1).max(100).optional(),
       })
+      .default({})
       .parse(input),
   )
+
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
