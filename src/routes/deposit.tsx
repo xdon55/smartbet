@@ -1,15 +1,22 @@
 /**
- * routes/deposit.tsx — DEPOSIT page (mock UI only).
+ * routes/deposit.tsx — DEPOSIT page.
+ *
  * Presents amount selection and mobile-money style payment options in UGX.
- * Wire the submit flow to the payments provider (e.g. MTN/Airtel money).
+ * For Phase 1/2 this wires to an internal wallet credit so we can prove the
+ * ledger before a real payment provider (MTN/Airtel) is integrated.
+ * Real deposits later will call the same `wallet_transact` RPC once a provider
+ * webhook confirms funds.
  */
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatUgx } from "@/lib/betting-data";
+import { useWallet } from "@/hooks/use-wallet";
+import { useServerFn } from "@tanstack/react-start";
+import { internalDeposit } from "@/modules/wallet/wallet.functions";
 
 export const Route = createFileRoute("/deposit")({
   head: () => ({
@@ -35,13 +42,33 @@ const methods = [
 const quick = [5000, 10000, 20000, 50000, 100000];
 
 function DepositPage() {
+  const router = useRouter();
+  const { balance, loading } = useWallet();
+  const deposit = useServerFn(internalDeposit);
   const [method, setMethod] = useState("mtn");
   const [amount, setAmount] = useState(10000);
+  const [pending, setPending] = useState(false);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setPending(true);
+    try {
+      await deposit({ amount, reference: method });
+      toast.success(`Wallet credited with ${formatUgx(amount)}`);
+      router.navigate({ to: "/transactions" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Deposit failed");
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <main className="mx-auto max-w-md px-3 py-6">
       <h1 className="mb-1 font-display text-2xl font-bold uppercase tracking-wide">Deposit</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Balance {formatUgx(48500)}</p>
+      <p className="mb-4 text-sm text-muted-foreground">
+        Balance {loading ? "—" : formatUgx(balance ?? 0)}
+      </p>
 
       <div className="space-y-2">
         {methods.map((m) => (
@@ -64,13 +91,7 @@ function DepositPage() {
         ))}
       </div>
 
-      <form
-        className="mt-4 space-y-4 rounded-lg border border-border bg-card p-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          toast.success(`Deposit request of ${formatUgx(amount)} sent (demo)`);
-        }}
-      >
+      <form className="mt-4 space-y-4 rounded-lg border border-border bg-card p-4" onSubmit={onSubmit}>
         <div className="space-y-1.5">
           <Label htmlFor="dep-phone">Phone number</Label>
           <Input id="dep-phone" inputMode="tel" placeholder="0772 000 000" required />
@@ -96,8 +117,8 @@ function DepositPage() {
             </button>
           ))}
         </div>
-        <Button type="submit" className="w-full" disabled={amount < 1000}>
-          Deposit {formatUgx(amount)}
+        <Button type="submit" className="w-full" disabled={pending || amount < 1000}>
+          {pending ? "Processing..." : `Deposit ${formatUgx(amount)}`}
         </Button>
         <p className="text-[11px] text-muted-foreground">
           Minimum deposit UGX 1,000. You will receive a prompt on your phone to approve.
