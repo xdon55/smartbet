@@ -113,7 +113,8 @@ export function AccountMenu() {
                 <LogOut className="h-4 w-4 text-muted-foreground" />
                 Sign out
               </Button>
-            ))}
+            )}
+
 
             <div className="flex items-center justify-between rounded-md px-3 py-2.5 text-sm font-semibold">
               <span>Appearance</span>
