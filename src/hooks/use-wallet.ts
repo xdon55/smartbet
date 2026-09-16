@@ -32,9 +32,10 @@ export function useWallet() {
       try {
         const [bal, txs] = await Promise.all([
           fetchBalance(),
-          fetchTransactions(),
+          fetchTransactions({}),
 
         ]);
+
         if (mounted) {
           setBalance(bal);
           setTransactions(txs);
