@@ -2,21 +2,27 @@
  * hooks/use-wallet.ts
  * ─────────────────────────────────────────────────────────────────────────────
  * Fetches the signed-in user's wallet balance and recent transaction history.
- * Refreshes automatically when the user changes.
+ * Refreshes automatically when the user changes and exposes a manual refresh
+ * callback so form submissions can update the displayed balance without a full
+ * page reload.
  * ─────────────────────────────────────────────────────────────────────────────
  */
-import { useEffect, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
-import { getWalletBalance, getWalletTransactions, type WalletTransaction } from "@/modules/wallet/wallet.functions";
+import { useEffect, useState, useCallback } from "react";
+import {
+  getWalletBalance,
+  getWalletTransactions,
+  type WalletTransaction,
+} from "@/modules/wallet/wallet.functions";
 import { useAuth } from "./use-auth";
 
 export function useWallet() {
   const { isAuthenticated, user } = useAuth();
-  const fetchBalance = useServerFn(getWalletBalance);
-  const fetchTransactions = useServerFn(getWalletTransactions);
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refresh = useCallback(() => setRefreshKey((k) => k + 1), []);
 
   useEffect(() => {
     let mounted = true;
@@ -30,10 +36,11 @@ export function useWallet() {
         return;
       }
       try {
+        // Balance is derived from ledger_entries by the wallet_balance RPC.
+        // Transaction history is paginated; default to the most recent 50 rows.
         const [bal, txs] = await Promise.all([
-          fetchBalance(),
-          fetchTransactions({}),
-
+          getWalletBalance(),
+          (getWalletTransactions as any)({ data: {} }),
         ]);
 
         if (mounted) {
@@ -51,7 +58,7 @@ export function useWallet() {
     return () => {
       mounted = false;
     };
-  }, [isAuthenticated, user?.id, fetchBalance, fetchTransactions]);
+  }, [isAuthenticated, user?.id, refreshKey]);
 
-  return { balance, transactions, loading, refresh: () => window.location.reload() };
+  return { balance, transactions, loading, refresh };
 }
