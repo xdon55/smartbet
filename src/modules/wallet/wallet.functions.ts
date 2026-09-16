@@ -16,7 +16,9 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { zodValidator } from "@tanstack/zod-adapter";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
 
 export type WalletTransaction = {
   id: string;
