@@ -1,15 +1,21 @@
 /**
- * routes/withdraw.tsx — WITHDRAW page (mock UI only).
- * Mirrors the deposit flow. Wire to the payouts API; enforce balance checks
- * and KYC status server-side before releasing funds.
+ * routes/withdraw.tsx — WITHDRAW page.
+ *
+ * Presents amount selection and mobile-money style payout options in UGX.
+ * For Phase 1/2 this wires to an internal wallet debit so we can prove the
+ * ledger before a real payout provider (MTN/Airtel) is integrated.
+ * Real withdrawals later will call the same `wallet_transact` RPC once a provider
+ * webhook confirms the payout.
  */
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatUgx } from "@/lib/betting-data";
+import { useWallet } from "@/hooks/use-wallet";
+import { internalWithdraw } from "@/modules/wallet/wallet.functions";
 
 export const Route = createFileRoute("/withdraw")({
   head: () => ({
@@ -26,21 +32,47 @@ export const Route = createFileRoute("/withdraw")({
   component: WithdrawPage,
 });
 
-const balance = 48500;
 const methods = [
   { id: "mtn", name: "MTN MoMo", note: "Payout in 2-5 minutes" },
   { id: "airtel", name: "Airtel Money", note: "Payout in 2-5 minutes" },
 ];
 
 function WithdrawPage() {
+  const router = useRouter();
+  const { balance, loading, refresh } = useWallet();
   const [method, setMethod] = useState("mtn");
   const [amount, setAmount] = useState(10000);
+  const [pending, setPending] = useState(false);
   const fee = Math.round(amount * 0.01);
+  const available = balance ?? 0;
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (amount > available) {
+      toast.error("Insufficient balance");
+      return;
+    }
+    setPending(true);
+    try {
+      // Phase 1/2: internal ledger debit. Real payouts will later call the same
+      // wallet_transact RPC after a provider webhook confirms the payout.
+      await (internalWithdraw as any)({ data: { amount, reference: method } });
+      toast.success(`Withdrawal of ${formatUgx(amount)} requested`);
+      refresh();
+      router.navigate({ to: "/transactions" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Withdrawal failed");
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <main className="mx-auto max-w-md px-3 py-6">
       <h1 className="mb-1 font-display text-2xl font-bold uppercase tracking-wide">Withdraw</h1>
-      <p className="mb-4 text-sm text-muted-foreground">Withdrawable balance {formatUgx(balance)}</p>
+      <p className="mb-4 text-sm text-muted-foreground">
+        Withdrawable balance {loading ? "—" : formatUgx(available)}
+      </p>
 
       <div className="space-y-2">
         {methods.map((m) => (
@@ -63,13 +95,7 @@ function WithdrawPage() {
         ))}
       </div>
 
-      <form
-        className="mt-4 space-y-4 rounded-lg border border-border bg-card p-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          toast.success(`Withdrawal of ${formatUgx(amount)} requested (demo)`);
-        }}
-      >
+      <form className="mt-4 space-y-4 rounded-lg border border-border bg-card p-4" onSubmit={onSubmit}>
         <div className="space-y-1.5">
           <Label htmlFor="wd-phone">Phone number</Label>
           <Input id="wd-phone" inputMode="tel" placeholder="0772 000 000" required />
@@ -93,7 +119,11 @@ function WithdrawPage() {
             <dd className="font-semibold tabular-nums">{formatUgx(Math.max(amount - fee, 0))}</dd>
           </div>
         </dl>
-        <Button type="submit" className="w-full" disabled={amount < 5000 || amount > balance}>
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={pending || amount < 5000 || amount > available}
+        >
           Withdraw {formatUgx(amount)}
         </Button>
         <p className="text-[11px] text-muted-foreground">
