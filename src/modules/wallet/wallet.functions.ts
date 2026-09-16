@@ -161,7 +161,7 @@ export const internalDeposit = createServerFn({ method: "POST" })
  */
 export const internalWithdraw = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         amount: z.number().int().positive(),
@@ -169,6 +169,7 @@ export const internalWithdraw = createServerFn({ method: "POST" })
       })
       .parse(input),
   )
+
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
