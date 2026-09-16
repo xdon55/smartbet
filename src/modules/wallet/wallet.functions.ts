@@ -84,13 +84,15 @@ export const getWalletBalance = createServerFn({ method: "GET" })
 export const getWalletTransactions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .validator(
-    zodValidator(
-      z.object({
-        cursor: z.string().uuid().optional(),
-        limit: z.number().int().min(1).max(100).optional(),
-      }),
-    ),
+    (input: { cursor?: string; limit?: number }) =>
+      z
+        .object({
+          cursor: z.string().uuid().optional(),
+          limit: z.number().int().min(1).max(100).optional(),
+        })
+        .parse(input),
   )
+
 
 
 
