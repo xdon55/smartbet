@@ -81,7 +81,7 @@ export const getWalletBalance = createServerFn({ method: "GET" })
  */
 export const getWalletTransactions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         cursor: z.string().uuid().optional(),
@@ -90,6 +90,7 @@ export const getWalletTransactions = createServerFn({ method: "GET" })
       .default({})
       .parse(input),
   )
+
 
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
