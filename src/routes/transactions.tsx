@@ -1,11 +1,14 @@
 /**
- * routes/transactions.tsx — TRANSACTIONS page (mock UI only).
- * Static list of deposits/withdrawals/bets. Replace with the wallet
- * transaction history API, paginated.
+ * routes/transactions.tsx — TRANSACTIONS page.
+ *
+ * Lists every wallet movement for the signed-in user: deposits, withdrawals,
+ * stakes and payouts. Data comes from the real `transactions` table and is
+ * kept in sync with the double-entry ledger.
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowDownToLine, ArrowUpFromLine, Receipt } from "lucide-react";
 import { formatUgx } from "@/lib/betting-data";
+import { useWallet } from "@/hooks/use-wallet";
 
 export const Route = createFileRoute("/transactions")({
   head: () => ({
@@ -22,48 +25,77 @@ export const Route = createFileRoute("/transactions")({
   component: TransactionsPage,
 });
 
-const rows = [
-  { id: "t1", type: "deposit", label: "MTN MoMo deposit", at: "Today 12:01", amount: 20000 },
-  { id: "t2", type: "stake", label: "Bet SB9WM2D", at: "Today 12:04", amount: -10000 },
-  { id: "t3", type: "payout", label: "Payout SB4KQ7X", at: "Yesterday 21:40", amount: 22100 },
-  { id: "t4", type: "withdraw", label: "Airtel Money withdrawal", at: "Yesterday 22:10", amount: -15000 },
-  { id: "t5", type: "deposit", label: "Airtel Money deposit", at: "Sat 09:22", amount: 10000 },
-];
-
 const icons = {
+  internal_deposit: ArrowDownToLine,
   deposit: ArrowDownToLine,
   payout: ArrowDownToLine,
+  internal_withdrawal: ArrowUpFromLine,
   withdraw: ArrowUpFromLine,
   stake: Receipt,
 } as const;
 
+function formatWhen(iso: string) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString("en-UG", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function labelFor(tx: { type: string; reference: string | null }) {
+  switch (tx.type) {
+    case "internal_deposit":
+      return `Deposit${tx.reference ? ` · ${tx.reference}` : ""}`;
+    case "internal_withdrawal":
+      return `Withdrawal${tx.reference ? ` · ${tx.reference}` : ""}`;
+    case "stake":
+      return `Bet stake${tx.reference ? ` · ${tx.reference}` : ""}`;
+    case "payout":
+      return `Payout${tx.reference ? ` · ${tx.reference}` : ""}`;
+    default:
+      return tx.reference ?? tx.type;
+  }
+}
+
 function TransactionsPage() {
+  const { transactions, loading } = useWallet();
+
   return (
     <main className="mx-auto max-w-2xl px-3 py-6">
       <h1 className="mb-4 font-display text-2xl font-bold uppercase tracking-wide">Transactions</h1>
-      <ul className="overflow-hidden rounded-lg border border-border">
-        {rows.map((r) => {
-          const Icon = icons[r.type as keyof typeof icons];
-          return (
-            <li
-              key={r.id}
-              className="flex items-center gap-3 border-b border-border bg-card px-3 py-3 last:border-b-0"
-            >
-              <Icon className="h-4 w-4 text-muted-foreground" />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold">{r.label}</p>
-                <p className="text-[11px] text-muted-foreground">{r.at}</p>
-              </div>
-              <span
-                className={`text-sm font-bold tabular-nums ${r.amount > 0 ? "text-accent" : "text-foreground"}`}
+      {loading ? (
+        <p className="text-sm text-muted-foreground">Loading transactions…</p>
+      ) : transactions.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No transactions yet.</p>
+      ) : (
+        <ul className="overflow-hidden rounded-lg border border-border">
+          {transactions.map((tx) => {
+            const Icon = icons[tx.type as keyof typeof icons] ?? Receipt;
+            const isCredit = tx.direction === "credit";
+            return (
+              <li
+                key={tx.id}
+                className="flex items-center gap-3 border-b border-border bg-card px-3 py-3 last:border-b-0"
               >
-                {r.amount > 0 ? "+" : "-"}
-                {formatUgx(Math.abs(r.amount))}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
+                <Icon className="h-4 w-4 text-muted-foreground" />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold">{labelFor(tx)}</p>
+                  <p className="text-[11px] text-muted-foreground">{formatWhen(tx.created_at)}</p>
+                </div>
+                <span
+                  className={`text-sm font-bold tabular-nums ${isCredit ? "text-accent" : "text-foreground"}`}
+                >
+                  {isCredit ? "+" : "-"}
+                  {formatUgx(tx.amount)}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </main>
   );
 }
