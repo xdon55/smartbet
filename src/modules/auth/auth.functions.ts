@@ -6,10 +6,12 @@
  * INTEGRATION NOTES:
  * - Auth providers (email, phone, Google, Apple) are handled by Lovable Cloud
  *   Auth. These functions only deal with the post-auth application state:
- *   profile, wallet, and platform configuration.
- * - `getCurrentUserProfile` lazily creates the `profiles` and `wallets` rows the
- *   first time a signed-in user is seen, so every authenticated route can assume
- *   both exist.
+ *   profile, wallet, default role, and platform configuration.
+ * - `getCurrentUserProfile` lazily creates the `profiles`, `wallets`, and default
+ *   `user_roles` rows the first time a signed-in user is seen, so every
+ *   authenticated route can assume they exist.
+ * - Privileged writes (audit_log, user_roles) use the server-only admin client
+ *   loaded inside the handler so the service role key never reaches the browser.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 import { createServerFn } from "@tanstack/react-start";
@@ -30,9 +32,9 @@ const profileSchema = z.object({
 export type UserProfile = z.infer<typeof profileSchema>;
 
 /**
- * Ensure the signed-in user has a profile and a wallet, then return the profile.
- * Called lazily from authenticated components so we never rely on a trigger on
- * the auth schema.
+ * Ensure the signed-in user has a profile, wallet, and default player role, then
+ * return the profile. Called lazily from authenticated components so we never
+ * rely on a trigger on the auth schema.
  */
 export const getCurrentUserProfile = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -47,27 +49,59 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
       .maybeSingle();
 
     if (existing) {
-      // Ensure a wallet exists even if profile was created earlier.
+      // Ensure a wallet exists even if the profile was created earlier.
       await supabase
         .from("wallets")
         .upsert({ user_id: userId, currency: "UGX" }, { onConflict: "user_id" });
       return profileSchema.parse(existing);
     }
 
+    // Privileged inserts need the server-only admin client. We load it dynamically
+    // because this module is reachable from the client bundle.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Copy registration metadata saved by the auth page into the profile.
+    const {
+      data: { user },
+    } = await supabaseAdmin.auth.admin.getUserById(userId);
+    const meta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+
+    const displayName =
+      typeof meta.display_name === "string" ? meta.display_name : null;
+    const phone = typeof meta.phone === "string" ? meta.phone : null;
+    const dateOfBirth =
+      typeof meta.date_of_birth === "string" ? meta.date_of_birth : null;
+
     // Create profile and wallet in one go.
-    const { data: profile, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabaseAdmin
       .from("profiles")
-      .insert({ id: userId })
+      .insert({
+        id: userId,
+        display_name: displayName,
+        phone,
+        date_of_birth: dateOfBirth,
+      })
       .select("*")
       .single();
     if (profileError) throw new Error(profileError.message);
 
-    await supabase
+    const { error: walletError } = await supabaseAdmin
       .from("wallets")
       .upsert({ user_id: userId, currency: "UGX" }, { onConflict: "user_id" });
+    if (walletError) throw new Error(walletError.message);
+
+    // Default every new account to the `player` role.
+    const { error: roleError } = await supabaseAdmin.from("user_roles").insert({
+      user_id: userId,
+      role: "player",
+    });
+    if (roleError && roleError.code !== "23505") {
+      // 23505 = unique violation (role already exists). Anything else is fatal.
+      throw new Error(roleError.message);
+    }
 
     // Audit trail: account opened.
-    await supabase.from("audit_log").insert({
+    await supabaseAdmin.from("audit_log").insert({
       actor_id: userId,
       action: "account_opened",
       entity_type: "profile",
