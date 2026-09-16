@@ -15,8 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatUgx } from "@/lib/betting-data";
 import { useWallet } from "@/hooks/use-wallet";
-import { useServerFn } from "@tanstack/react-start";
 import { internalDeposit } from "@/modules/wallet/wallet.functions";
+
 
 export const Route = createFileRoute("/deposit")({
   head: () => ({
