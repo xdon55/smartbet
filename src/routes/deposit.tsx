@@ -43,11 +43,11 @@ const quick = [5000, 10000, 20000, 50000, 100000];
 
 function DepositPage() {
   const router = useRouter();
-  const { balance, loading } = useWallet();
-  const deposit = useServerFn(internalDeposit);
+  const { balance, loading, refresh } = useWallet();
   const [method, setMethod] = useState("mtn");
   const [amount, setAmount] = useState(10000);
   const [pending, setPending] = useState(false);
+
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
