@@ -53,8 +53,11 @@ function DepositPage() {
     e.preventDefault();
     setPending(true);
     try {
-      await deposit({ amount, reference: method });
+      // Phase 1/2: internal ledger credit. Real payments will later call the same
+      // wallet_transact RPC after a provider webhook confirms funds.
+      await (internalDeposit as any)({ data: { amount, reference: method } });
       toast.success(`Wallet credited with ${formatUgx(amount)}`);
+      refresh();
       router.navigate({ to: "/transactions" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Deposit failed");
@@ -62,6 +65,7 @@ function DepositPage() {
       setPending(false);
     }
   }
+
 
   return (
     <main className="mx-auto max-w-md px-3 py-6">
