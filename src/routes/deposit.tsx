@@ -15,8 +15,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { formatUgx } from "@/lib/betting-data";
 import { useWallet } from "@/hooks/use-wallet";
-import { useServerFn } from "@tanstack/react-start";
 import { internalDeposit } from "@/modules/wallet/wallet.functions";
+
 
 export const Route = createFileRoute("/deposit")({
   head: () => ({
@@ -43,18 +43,21 @@ const quick = [5000, 10000, 20000, 50000, 100000];
 
 function DepositPage() {
   const router = useRouter();
-  const { balance, loading } = useWallet();
-  const deposit = useServerFn(internalDeposit);
+  const { balance, loading, refresh } = useWallet();
   const [method, setMethod] = useState("mtn");
   const [amount, setAmount] = useState(10000);
   const [pending, setPending] = useState(false);
+
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
     try {
-      await deposit({ amount, reference: method });
+      // Phase 1/2: internal ledger credit. Real payments will later call the same
+      // wallet_transact RPC after a provider webhook confirms funds.
+      await (internalDeposit as any)({ data: { amount, reference: method } });
       toast.success(`Wallet credited with ${formatUgx(amount)}`);
+      refresh();
       router.navigate({ to: "/transactions" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Deposit failed");
@@ -62,6 +65,7 @@ function DepositPage() {
       setPending(false);
     }
   }
+
 
   return (
     <main className="mx-auto max-w-md px-3 py-6">

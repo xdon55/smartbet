@@ -16,7 +16,9 @@
  */
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { zodValidator } from "@tanstack/zod-adapter";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+
 
 export type WalletTransaction = {
   id: string;
@@ -81,15 +83,18 @@ export const getWalletBalance = createServerFn({ method: "GET" })
  */
 export const getWalletTransactions = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
-    z
-      .object({
-        cursor: z.string().uuid().optional(),
-        limit: z.number().int().min(1).max(100).optional(),
-      })
-      .default({})
-      .parse(input),
+  .validator(
+    (input: { cursor?: string; limit?: number }) =>
+      z
+        .object({
+          cursor: z.string().uuid().optional(),
+          limit: z.number().int().min(1).max(100).optional(),
+        })
+        .parse(input),
   )
+
+
+
 
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
@@ -127,7 +132,7 @@ export const getWalletTransactions = createServerFn({ method: "GET" })
  */
 export const internalDeposit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         amount: z.number().int().positive(),
@@ -135,6 +140,7 @@ export const internalDeposit = createServerFn({ method: "POST" })
       })
       .parse(input),
   )
+
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
@@ -159,7 +165,7 @@ export const internalDeposit = createServerFn({ method: "POST" })
  */
 export const internalWithdraw = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input) =>
+  .validator((input) =>
     z
       .object({
         amount: z.number().int().positive(),
@@ -167,6 +173,7 @@ export const internalWithdraw = createServerFn({ method: "POST" })
       })
       .parse(input),
   )
+
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
