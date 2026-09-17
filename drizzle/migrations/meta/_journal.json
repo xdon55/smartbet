@@ -8,6 +8,13 @@
       "when": 1789367939941,
       "tag": "0000_phase1_foundation_phase2_wallet",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789633992626,
+      "tag": "0001_grant_wallet_transact_execute",
+      "breakpoints": true
     }
   ]
 }
