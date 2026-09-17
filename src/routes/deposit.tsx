@@ -48,23 +48,33 @@ function DepositPage() {
   const [amount, setAmount] = useState(10000);
   const [pending, setPending] = useState(false);
 
+  // DEBUG: inspect the imported server function in the browser console
+  // eslint-disable-next-line no-console
+  console.log("internalDeposit import:", internalDeposit, typeof internalDeposit);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    // eslint-disable-next-line no-console
+    console.log("DEPOSIT SUBMIT FIRED", amount, method);
     e.preventDefault();
     setPending(true);
     try {
       // Phase 1/2: internal ledger credit. Real payments will later call the same
       // wallet_transact RPC after a provider webhook confirms funds.
+      // eslint-disable-next-line no-console
+      console.log("calling internalDeposit...");
       await (internalDeposit as any)({ data: { amount, reference: method } });
       toast.success(`Wallet credited with ${formatUgx(amount)}`);
       refresh();
       router.navigate({ to: "/transactions" });
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log("DEPOSIT ERROR", err);
       toast.error(err instanceof Error ? err.message : "Deposit failed");
     } finally {
       setPending(false);
     }
   }
+
 
 
   return (
@@ -121,9 +131,12 @@ function DepositPage() {
             </button>
           ))}
         </div>
-        <Button type="submit" className="w-full" disabled={pending || amount < 1000}>
+        <button type="submit" className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
           {pending ? "Processing..." : `Deposit ${formatUgx(amount)}`}
-        </Button>
+        </button>
+
+
+
         <p className="text-[11px] text-muted-foreground">
           Minimum deposit UGX 1,000. You will receive a prompt on your phone to approve.
         </p>
