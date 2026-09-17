@@ -53,22 +53,28 @@ function DepositPage() {
   console.log("internalDeposit import:", internalDeposit, typeof internalDeposit);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-
+    // eslint-disable-next-line no-console
+    console.log("DEPOSIT SUBMIT FIRED", amount, method);
     e.preventDefault();
     setPending(true);
     try {
       // Phase 1/2: internal ledger credit. Real payments will later call the same
       // wallet_transact RPC after a provider webhook confirms funds.
+      // eslint-disable-next-line no-console
+      console.log("calling internalDeposit...");
       await (internalDeposit as any)({ data: { amount, reference: method } });
       toast.success(`Wallet credited with ${formatUgx(amount)}`);
       refresh();
       router.navigate({ to: "/transactions" });
     } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log("DEPOSIT ERROR", err);
       toast.error(err instanceof Error ? err.message : "Deposit failed");
     } finally {
       setPending(false);
     }
   }
+
 
 
   return (
