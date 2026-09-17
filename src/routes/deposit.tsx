@@ -121,9 +121,10 @@ function DepositPage() {
             </button>
           ))}
         </div>
-        <Button type="submit" className="w-full" disabled={pending || amount < 1000}>
+        <Button type="submit" className="w-full" disabled={pending}>
           {pending ? "Processing..." : `Deposit ${formatUgx(amount)}`}
         </Button>
+
         <p className="text-[11px] text-muted-foreground">
           Minimum deposit UGX 1,000. You will receive a prompt on your phone to approve.
         </p>
