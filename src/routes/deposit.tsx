@@ -48,8 +48,12 @@ function DepositPage() {
   const [amount, setAmount] = useState(10000);
   const [pending, setPending] = useState(false);
 
+  // DEBUG: inspect the imported server function in the browser console
+  // eslint-disable-next-line no-console
+  console.log("internalDeposit import:", internalDeposit, typeof internalDeposit);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+
     e.preventDefault();
     setPending(true);
     try {
