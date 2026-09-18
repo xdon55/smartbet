@@ -48,36 +48,29 @@ function DepositPage() {
   const [amount, setAmount] = useState(10000);
   const [pending, setPending] = useState(false);
 
-  // DEBUG: inspect the imported server function in the browser console
-  // eslint-disable-next-line no-console
-  console.log("internalDeposit import:", internalDeposit, typeof internalDeposit);
-
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    // eslint-disable-next-line no-console
-    console.log("DEPOSIT SUBMIT FIRED", amount, method);
     e.preventDefault();
+    if (amount < 1000) {
+      toast.error("Minimum deposit is UGX 1,000");
+      return;
+    }
     setPending(true);
     try {
       // Phase 1/2: internal ledger credit. Real payments will later call the same
       // wallet_transact RPC after a provider webhook confirms funds.
-      // eslint-disable-next-line no-console
-      console.log("calling internalDeposit...");
       await (internalDeposit as any)({ data: { amount, reference: method } });
       toast.success(`Wallet credited with ${formatUgx(amount)}`);
       refresh();
       router.navigate({ to: "/transactions" });
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.log("DEPOSIT ERROR", err);
       toast.error(err instanceof Error ? err.message : "Deposit failed");
     } finally {
       setPending(false);
     }
   }
 
-
-
   return (
+
     <main className="mx-auto max-w-md px-3 py-6">
       <h1 className="mb-1 font-display text-2xl font-bold uppercase tracking-wide">Deposit</h1>
       <p className="mb-4 text-sm text-muted-foreground">
