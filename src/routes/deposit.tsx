@@ -124,9 +124,10 @@ function DepositPage() {
             </button>
           ))}
         </div>
-        <button type="submit" className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+        <Button type="submit" className="w-full" disabled={pending || amount < 1000}>
           {pending ? "Processing..." : `Deposit ${formatUgx(amount)}`}
-        </button>
+        </Button>
+
 
 
 
