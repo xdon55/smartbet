@@ -27,6 +27,8 @@ const profileSchema = z.object({
   date_of_birth: z.string().nullable(),
   kyc_status: z.string(),
   account_status: z.string(),
+  // Optional contact email; the auth credential email is synthetic (phone-derived).
+  email: z.string().nullable().optional(),
 });
 
 export type UserProfile = z.infer<typeof profileSchema>;
