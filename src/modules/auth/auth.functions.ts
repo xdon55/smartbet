@@ -27,6 +27,8 @@ const profileSchema = z.object({
   date_of_birth: z.string().nullable(),
   kyc_status: z.string(),
   account_status: z.string(),
+  // Optional contact email; the auth credential email is synthetic (phone-derived).
+  email: z.string().nullable().optional(),
 });
 
 export type UserProfile = z.infer<typeof profileSchema>;
@@ -71,6 +73,11 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
     const phone = typeof meta["phone"] === "string" ? meta["phone"] : null;
     const dateOfBirth =
       typeof meta["date_of_birth"] === "string" ? meta["date_of_birth"] : null;
+    // Optional contact email given at registration (never used as a credential).
+    const contactEmail =
+      typeof meta["contact_email"] === "string" && meta["contact_email"]
+        ? meta["contact_email"]
+        : null;
 
     // Create profile and wallet in one go.
     const { data: profile, error: profileError } = await supabaseAdmin
@@ -80,6 +87,7 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
         display_name: displayName,
         phone,
         date_of_birth: dateOfBirth,
+        email: contactEmail,
       })
 
       .select("*")

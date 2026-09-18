@@ -92,6 +92,39 @@ export type Database = {
           },
         ]
       }
+      phone_otps: {
+        Row: {
+          attempts: number
+          code: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          phone: string
+          purpose: string
+        }
+        Insert: {
+          attempts?: number
+          code: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          phone: string
+          purpose?: string
+        }
+        Update: {
+          attempts?: number
+          code?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          phone?: string
+          purpose?: string
+        }
+        Relationships: []
+      }
       platform_config: {
         Row: {
           key: string
@@ -118,6 +151,7 @@ export type Database = {
           currency: string
           date_of_birth: string | null
           display_name: string | null
+          email: string | null
           id: string
           kyc_status: string
           phone: string | null
@@ -130,6 +164,7 @@ export type Database = {
           currency?: string
           date_of_birth?: string | null
           display_name?: string | null
+          email?: string | null
           id: string
           kyc_status?: string
           phone?: string | null
@@ -142,6 +177,7 @@ export type Database = {
           currency?: string
           date_of_birth?: string | null
           display_name?: string | null
+          email?: string | null
           id?: string
           kyc_status?: string
           phone?: string | null
