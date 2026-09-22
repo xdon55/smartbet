@@ -3,20 +3,39 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * GLOBAL BET SLIP STATE (React context).
  *
- * This is the heart of the betting flow:
+ * Flow:
  *   MatchCard / detail page  →  toggle(Selection)  →  BetSlip UI  →  placeBet()
  *
- * INTEGRATION NOTES:
- * - `placeBet()` currently records bets locally in state. Replace its body
- *   with a call to your bet-placement API, then refresh `bets` from the
- *   backend (or keep the optimistic prepend).
- * - Selection ids are `${matchId}-${marketId}-${outcomeId}` — stable keys that
- *   let the UI highlight active odds buttons via `has(id)`.
+ * PHASE 3 — bets are now REAL:
+ * - `placeBet()` calls the `placeBetOnServer` server function. The browser sends
+ *   only selection keys and the stake; the server re-reads authoritative odds
+ *   from the catalogue, debits the wallet through the double-entry ledger and
+ *   stores the bet. Displayed odds are indicative only.
+ * - `bets` (My Bets) is loaded from the database for the signed-in user.
+ * - Selection ids are `${matchId}-${marketId}-${outcomeId}` — that encoding is
+ *   what `toPick()` below decodes into the keys the server expects, so all
+ *   existing odds buttons keep working unchanged.
  * - One pick per (match, market): adding another outcome of the same market
  *   on the same match replaces the previous one.
  * ─────────────────────────────────────────────────────────────────────────────
  */
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import { useServerFn } from "@tanstack/react-start";
+import {
+  getMyBets,
+  placeBetOnServer,
+  type BetPick,
+  type ServerBet,
+} from "@/modules/sportsbook/betting.functions";
+import { useAuth } from "@/hooks/use-auth";
 
 /** One leg on the slip. `id` must be unique per match+market+outcome. */
 export type Selection = {
@@ -54,78 +73,94 @@ type BetSlipContextValue = {
   open: boolean; // mobile fullscreen slip visibility
   setOpen: (v: boolean) => void;
   bets: PlacedBet[];
-  placeBet: () => PlacedBet | null;
+  betsLoading: boolean;
+  refreshBets: () => void;
+  placing: boolean;
+  /** Places the slip on the server. Throws with a human-readable message. */
+  placeBet: () => Promise<PlacedBet | null>;
 };
 
 const BetSlipContext = createContext<BetSlipContextValue | null>(null);
 
-/* ── Seed bet history ───────────────────────────────────────────────────────
- * Demo receipts so My Bets isn't empty. TODO(integration): fetch the user's
- * real bet history and drop this constant.
+/* ── Key decoding ───────────────────────────────────────────────────────────
+ * Selection ids look like `${matchId}-${marketKey}-${selectionKey}`.
+ * Market keys never contain a dash; selection keys may ("1-0" correct score),
+ * so we split on the FIRST dash after the match id and keep the rest intact.
  * ──────────────────────────────────────────────────────────────────────── */
-const initialBets: PlacedBet[] = [
-  {
-    id: "b-201",
-    code: "SB4KQ7X",
-    placedAt: "Yesterday 19:12",
-    stake: 5000,
-    totalOdds: 4.42,
-    potential: 22100,
-    status: "won",
-    selections: [
-      {
-        id: "x1",
-        matchId: "m9",
-        match: "Express FC v SC Villa",
-        market: "1X2",
-        pick: "1",
-        odds: 2.1,
-      },
-      {
-        id: "x2",
-        matchId: "m10",
-        match: "Chelsea v Everton",
-        market: "Total goals 2.5",
-        pick: "Over",
-        odds: 2.1,
-      },
-    ],
-  },
-  {
-    id: "b-202",
-    code: "SB9WM2D",
-    placedAt: "Today 12:04",
-    stake: 10000,
-    totalOdds: 3.18,
-    potential: 31800,
-    status: "open",
-    selections: [
-      {
-        id: "x3",
-        matchId: "m11",
-        match: "Inter v Napoli",
-        market: "Both teams to score",
-        pick: "Yes",
-        odds: 1.88,
-      },
-      {
-        id: "x4",
-        matchId: "m12",
-        match: "Bayern München v RB Leipzig",
-        market: "1X2",
-        pick: "1",
-        odds: 1.69,
-      },
-    ],
-  },
-];
+function toPick(s: Selection): BetPick {
+  const rest = s.id.startsWith(`${s.matchId}-`) ? s.id.slice(s.matchId.length + 1) : s.id;
+  const dash = rest.indexOf("-");
+  return {
+    eventId: s.matchId,
+    marketKey: dash === -1 ? rest : rest.slice(0, dash),
+    selectionKey: dash === -1 ? "" : rest.slice(dash + 1),
+  };
+}
+
+/** Maps a stored server bet into the receipt shape the My Bets screens render. */
+function toPlacedBet(b: ServerBet): PlacedBet {
+  const status: PlacedBet["status"] =
+    b.status === "won" || b.status === "lost" ? b.status : "open";
+  return {
+    id: b.id,
+    code: b.code,
+    placedAt: new Date(b.createdAt).toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    stake: b.stake,
+    totalOdds: b.totalOdds,
+    potential: b.potentialPayout,
+    status,
+    selections: b.selections.map((l) => ({
+      id: `${l.eventId}-${l.marketKey}-${l.selectionKey}`,
+      matchId: l.eventId,
+      match: l.eventLabel,
+      market: l.marketName,
+      pick: l.selectionLabel,
+      odds: l.odds,
+    })),
+  };
+}
 
 /** Provider mounted once in src/routes/__root.tsx around the whole app. */
 export function BetSlipProvider({ children }: { children: ReactNode }) {
+  const { isAuthenticated, user } = useAuth();
+  const submitBet = useServerFn(placeBetOnServer);
+  const fetchBets = useServerFn(getMyBets);
+
   const [selections, setSelections] = useState<Selection[]>([]);
   const [stake, setStake] = useState(2000); // default stake in UGX
   const [open, setOpen] = useState(false);
-  const [bets, setBets] = useState<PlacedBet[]>(initialBets);
+  const [bets, setBets] = useState<PlacedBet[]>([]);
+  const [betsLoading, setBetsLoading] = useState(false);
+  const [placing, setPlacing] = useState(false);
+  const [betsKey, setBetsKey] = useState(0);
+
+  const refreshBets = useCallback(() => setBetsKey((k) => k + 1), []);
+
+  /* Load the signed-in player's real bet history. Signed-out users see none. */
+  useEffect(() => {
+    let mounted = true;
+    if (!isAuthenticated) {
+      setBets([]);
+      return;
+    }
+    setBetsLoading(true);
+    fetchBets()
+      .then((rows) => {
+        if (mounted) setBets((rows as ServerBet[]).map(toPlacedBet));
+      })
+      .catch((e) => console.error("Failed to load bets", e))
+      .finally(() => {
+        if (mounted) setBetsLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, [isAuthenticated, user?.id, betsKey, fetchBets]);
 
   /**
    * Add/remove a selection. Tapping the same odds button again removes it;
@@ -144,7 +179,7 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
 
   const clear = useCallback(() => setSelections([]), []);
 
-  // Accumulator odds: multiply all leg odds (empty slip = 1).
+  // Indicative accumulator odds for display; the server re-prices on placement.
   const totalOdds = useMemo(
     () => selections.reduce((acc, s) => acc * s.odds, 1),
     [selections],
@@ -153,31 +188,35 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
   const potentialWin = selections.length ? Math.round(stake * totalOdds) : 0;
 
   /**
-   * Submits the current slip as a bet. Uses a functional state update so it
-   * always reads the latest selections. TODO(integration): POST to the bets
-   * API here; handle insufficient balance / rejected legs from the response.
+   * Submits the current slip to the server. The server validates the account,
+   * stake, selections and funds, then writes the bet + ledger atomically.
+   * Throws an Error with a readable message the UI shows as a toast.
    */
-  const placeBet = useCallback(() => {
-    let placed: PlacedBet | null = null;
-    setSelections((current) => {
-      if (!current.length) return current;
-      const odds = current.reduce((acc, s) => acc * s.odds, 1);
-      placed = {
-        id: `b-${Math.floor(Math.random() * 9000) + 1000}`,
-        code: `SB${Math.random().toString(36).slice(2, 7).toUpperCase()}`,
-        placedAt: "Just now",
-        stake,
-        totalOdds: Number(odds.toFixed(2)),
-        potential: Math.round(stake * odds),
-        status: "open",
-        selections: current,
-      };
-      setBets((prev) => [placed as PlacedBet, ...prev]);
-      return []; // empty the slip after placing
-    });
-    setOpen(false); // close the mobile fullscreen slip
-    return placed;
-  }, [stake]);
+  const placeBet = useCallback(async () => {
+    if (!selections.length) return null;
+    if (!isAuthenticated) throw new Error("Sign in to place a bet");
+
+    setPlacing(true);
+    try {
+      // Idempotency key: same slip + stake submitted twice = one bet.
+      const idempotencyKey = `${user?.id ?? "anon"}:${Date.now()}:${stake}:${selections
+        .map((s) => s.id)
+        .sort()
+        .join("|")}`.slice(0, 120);
+
+      const bet = (await submitBet({
+        data: { stake, picks: selections.map(toPick), idempotencyKey },
+      })) as ServerBet;
+
+      const placed = toPlacedBet(bet);
+      setBets((prev) => [placed, ...prev]);
+      setSelections([]); // empty the slip after placing
+      setOpen(false); // close the mobile fullscreen slip
+      return placed;
+    } finally {
+      setPlacing(false);
+    }
+  }, [selections, stake, isAuthenticated, user?.id, submitBet]);
 
   const value: BetSlipContextValue = {
     selections,
@@ -192,6 +231,9 @@ export function BetSlipProvider({ children }: { children: ReactNode }) {
     open,
     setOpen,
     bets,
+    betsLoading,
+    refreshBets,
+    placing,
     placeBet,
   };
 
