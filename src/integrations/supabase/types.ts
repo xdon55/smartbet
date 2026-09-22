@@ -44,6 +44,106 @@ export type Database = {
         }
         Relationships: []
       }
+      bet_selections: {
+        Row: {
+          bet_id: string
+          event_id: string
+          event_label: string
+          id: number
+          market_key: string
+          market_name: string
+          odds: number
+          selection_key: string
+          selection_label: string
+          status: string
+        }
+        Insert: {
+          bet_id: string
+          event_id: string
+          event_label: string
+          id?: number
+          market_key: string
+          market_name: string
+          odds: number
+          selection_key: string
+          selection_label: string
+          status?: string
+        }
+        Update: {
+          bet_id?: string
+          event_id?: string
+          event_label?: string
+          id?: number
+          market_key?: string
+          market_name?: string
+          odds?: number
+          selection_key?: string
+          selection_label?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bet_selections_bet_id_fkey"
+            columns: ["bet_id"]
+            isOneToOne: false
+            referencedRelation: "bets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bets: {
+        Row: {
+          code: string
+          created_at: string
+          currency: string
+          id: string
+          idempotency_key: string
+          potential_payout: number
+          settled_at: string | null
+          stake: number
+          status: string
+          total_odds: number
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          currency?: string
+          id?: string
+          idempotency_key: string
+          potential_payout: number
+          settled_at?: string | null
+          stake: number
+          status?: string
+          total_odds: number
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          idempotency_key?: string
+          potential_payout?: number
+          settled_at?: string | null
+          stake?: number
+          status?: string
+          total_odds?: number
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bets_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ledger_entries: {
         Row: {
           account: string
@@ -185,6 +285,115 @@ export type Database = {
         }
         Relationships: []
       }
+      sb_events: {
+        Row: {
+          away: string
+          country: string
+          created_at: string
+          day_bucket: string
+          home: string
+          id: string
+          is_live: boolean
+          league: string
+          sport: string
+          starts_label: string
+          status: string
+        }
+        Insert: {
+          away: string
+          country: string
+          created_at?: string
+          day_bucket: string
+          home: string
+          id: string
+          is_live?: boolean
+          league: string
+          sport: string
+          starts_label: string
+          status?: string
+        }
+        Update: {
+          away?: string
+          country?: string
+          created_at?: string
+          day_bucket?: string
+          home?: string
+          id?: string
+          is_live?: boolean
+          league?: string
+          sport?: string
+          starts_label?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      sb_markets: {
+        Row: {
+          event_id: string
+          id: string
+          market_key: string
+          name: string
+          status: string
+        }
+        Insert: {
+          event_id: string
+          id: string
+          market_key: string
+          name: string
+          status?: string
+        }
+        Update: {
+          event_id?: string
+          id?: string
+          market_key?: string
+          name?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sb_markets_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "sb_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sb_selections: {
+        Row: {
+          id: number
+          label: string
+          market_id: string
+          odds: number
+          selection_key: string
+          status: string
+        }
+        Insert: {
+          id?: number
+          label: string
+          market_id: string
+          odds: number
+          selection_key: string
+          status?: string
+        }
+        Update: {
+          id?: number
+          label?: string
+          market_id?: string
+          odds?: number
+          selection_key?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sb_selections_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "sb_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       transactions: {
         Row: {
           amount: number
@@ -294,6 +503,15 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      place_bet: {
+        Args: {
+          _idempotency_key: string
+          _picks: Json
+          _stake: number
+          _user_id: string
+        }
+        Returns: string
       }
       wallet_balance: { Args: { _user_id: string }; Returns: number }
       wallet_transact: {
