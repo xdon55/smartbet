@@ -29,6 +29,8 @@ const profileSchema = z.object({
   account_status: z.string(),
   // Optional contact email; the auth credential email is synthetic (phone-derived).
   email: z.string().nullable().optional(),
+  // National ID / NIN captured at registration (nullable for legacy accounts).
+  national_id: z.string().nullable().optional(),
 });
 
 export type UserProfile = z.infer<typeof profileSchema>;
@@ -78,6 +80,11 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
       typeof meta["contact_email"] === "string" && meta["contact_email"]
         ? meta["contact_email"]
         : null;
+    // National ID / NIN captured at registration; KYC verification is a later phase.
+    const nationalId =
+      typeof meta["national_id"] === "string" && meta["national_id"]
+        ? meta["national_id"]
+        : null;
 
     // Create profile and wallet in one go.
     const { data: profile, error: profileError } = await supabaseAdmin
@@ -88,6 +95,7 @@ export const getCurrentUserProfile = createServerFn({ method: "GET" })
         phone,
         date_of_birth: dateOfBirth,
         email: contactEmail,
+        national_id: nationalId,
       })
 
       .select("*")

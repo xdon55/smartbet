@@ -88,6 +88,8 @@ const verifySchema = z.object({
   displayName: z.string().min(2),
   dateOfBirth: z.string().min(4),
   email: z.string().email().optional().or(z.literal("")),
+  // National ID / NIN — required for KYC later; basic shape check only here.
+  nationalId: z.string().min(5).max(30),
 });
 
 /**
@@ -145,6 +147,7 @@ export const verifyOtpAndRegister = createServerFn({ method: "POST" })
         display_name: data.displayName,
         date_of_birth: data.dateOfBirth,
         contact_email: data.email ? data.email : null,
+        national_id: data.nationalId,
         phone_verified: true,
       },
     });

@@ -56,6 +56,7 @@ type PendingSignup = {
   displayName: string;
   dateOfBirth: string;
   email: string;
+  nationalId: string;
   devCode: string;
 };
 
@@ -115,6 +116,9 @@ function AuthPage() {
     const displayName = (form.elements.namedItem("reg-name") as HTMLInputElement).value;
     const dob = (form.elements.namedItem("reg-dob") as HTMLInputElement).value;
     const email = (form.elements.namedItem("reg-email") as HTMLInputElement).value;
+    const nationalId = (
+      form.elements.namedItem("reg-national-id") as HTMLInputElement
+    ).value.trim();
 
     const phone = normalizePhone(rawPhone);
     if (!phone) {
@@ -123,6 +127,10 @@ function AuthPage() {
     }
     if (password.length < 8) {
       toast.error("Password must be at least 8 characters");
+      return;
+    }
+    if (nationalId.length < 5) {
+      toast.error("Enter a valid National ID number");
       return;
     }
 
@@ -135,6 +143,7 @@ function AuthPage() {
         displayName,
         dateOfBirth: dob,
         email,
+        nationalId,
         devCode: res.devCode,
       });
       setCode("");
@@ -160,6 +169,7 @@ function AuthPage() {
           displayName: signup.displayName,
           dateOfBirth: signup.dateOfBirth,
           email: signup.email,
+          nationalId: signup.nationalId,
         },
       });
       const { error } = await signInWithPhone(signup.phone, signup.password);
@@ -306,6 +316,16 @@ function AuthPage() {
               <div className="space-y-1.5">
                 <Label htmlFor="reg-email">Email address (optional)</Label>
                 <Input id="reg-email" name="reg-email" type="email" placeholder="you@example.com" />
+              </div>
+              {/* National ID (NIN) — required now, verified in the KYC phase. */}
+              <div className="space-y-1.5">
+                <Label htmlFor="reg-national-id">National ID number</Label>
+                <Input
+                  id="reg-national-id"
+                  name="reg-national-id"
+                  placeholder="e.g. CF1234567890AB"
+                  required
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="reg-dob">Date of birth</Label>
