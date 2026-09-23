@@ -29,6 +29,13 @@
       "when": 1790058552242,
       "tag": "0003_phase3_sportsbook_core",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790147079585,
+      "tag": "0004_add_national_id_to_profiles",
+      "breakpoints": true
     }
   ]
 }

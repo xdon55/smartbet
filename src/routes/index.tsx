@@ -256,18 +256,16 @@ function HomePage() {
 
         <div className="space-y-3">
           <SectionHead title="Top leagues" icon={Trophy} to="/sports" />
-          <div className="no-scrollbar flex gap-2.5 overflow-x-auto px-3 md:px-0">
+          {/** Top leagues render as compact tappable pills, not cards. */}
+          <div className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:flex-wrap md:px-0">
             {topLeagues.map((l) => (
               <Link
                 key={l.name}
                 to="/sports"
-                className="flex w-40 shrink-0 flex-col gap-2 rounded-md border border-border bg-card p-3 transition-colors hover:border-accent/60"
+                className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold text-card-foreground transition-colors hover:border-accent/60 hover:text-accent"
               >
-                <span className="text-xl leading-none">{flagFor(l.country)}</span>
-                <span className="text-xs font-semibold leading-snug text-card-foreground">
-                  {l.name}
-                </span>
-                <span className="text-[10px] font-medium text-muted-foreground">{l.country}</span>
+                <span className="text-sm leading-none">{flagFor(l.country)}</span>
+                {l.name}
               </Link>
             ))}
           </div>
