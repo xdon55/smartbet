@@ -21,8 +21,9 @@ const quickStakes = [1000, 2000, 5000, 10000];
 
 /** Shared slip content: selections list, stake controls, totals, actions. */
 function SlipBody() {
-  const { selections, remove, clear, stake, setStake, totalOdds, potentialWin, placeBet } =
+  const { selections, remove, clear, stake, setStake, totalOdds, potentialWin, placeBet, placing } =
     useBetSlip();
+
   const [bookingCode, setBookingCode] = useState<string | null>(null);
 
   if (!selections.length) {
