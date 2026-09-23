@@ -132,19 +132,31 @@ function SlipBody() {
           Create booking code
         </button>
 
+        {/* Real placement: the server re-prices the slip, checks the balance and
+            debits the wallet. Errors (not signed in, low funds, closed market)
+            come back as readable messages. */}
         <button
           type="button"
-          onClick={() => {
-            const bet = placeBet();
-            if (bet) {
-              setBookingCode(null);
-              toast.success(`Bet placed · code ${bet.code}`);
+          disabled={placing}
+          onClick={async () => {
+            try {
+              const bet = await placeBet();
+              if (bet) {
+                setBookingCode(null);
+                toast.success(`Bet placed · code ${bet.code}`);
+              }
+            } catch (e) {
+              const msg = e instanceof Error ? e.message : "Could not place bet";
+              toast.error(
+                msg.includes("insufficient funds") ? "Not enough balance for this stake" : msg,
+              );
             }
           }}
-          className="w-full rounded-md bg-accent py-3 text-[0.7rem] font-bold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90"
+          className="w-full rounded-md bg-accent py-3 text-[0.7rem] font-bold uppercase tracking-wide text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
         >
-          Place bet
+          {placing ? "Placing…" : "Place bet"}
         </button>
+
       </div>
     </div>
   );
