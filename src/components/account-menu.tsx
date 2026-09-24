@@ -69,17 +69,20 @@ export function AccountMenu() {
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto">
-          <div className="px-4 py-3">
-            <div className="rounded-lg brand-gradient p-3 text-surface-foreground">
-              <p className="text-xs uppercase tracking-wide opacity-80">Balance</p>
-              <p className="font-display text-2xl font-bold tabular-nums">
-                {authLoading || walletLoading ? "—" : formatUgx(balance ?? 0)}
-              </p>
-              {isAuthenticated && user?.email && (
-                <p className="mt-1 truncate text-xs opacity-80">{user.email}</p>
-              )}
+          {/** Wallet information is private to authenticated account holders. */}
+          {isAuthenticated && (
+            <div className="px-4 py-3">
+              <div className="rounded-lg brand-gradient p-3 text-surface-foreground">
+                <p className="text-xs uppercase tracking-wide opacity-80">Balance</p>
+                <p className="font-display text-2xl font-bold tabular-nums">
+                  {authLoading || walletLoading ? "—" : formatUgx(balance ?? 0)}
+                </p>
+                {user?.email && (
+                  <p className="mt-1 truncate text-xs opacity-80">{user.email}</p>
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           <nav className="px-2 pb-4">
             {links.map((l) => (

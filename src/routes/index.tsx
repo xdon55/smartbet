@@ -256,8 +256,8 @@ function HomePage() {
 
         <div className="space-y-3">
           <SectionHead title="Top leagues" icon={Trophy} to="/sports" />
-          {/** Top leagues render as compact tappable pills, not cards. */}
-          <div className="no-scrollbar flex gap-2 overflow-x-auto px-3 md:flex-wrap md:px-0">
+          {/** Keep every league on one scrollbar-free horizontal rail at all widths. */}
+          <div className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-3 md:px-0">
             {topLeagues.map((l) => (
               <Link
                 key={l.name}
