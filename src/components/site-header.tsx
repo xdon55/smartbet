@@ -32,8 +32,8 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 brand-gradient text-surface-foreground">
-      {/** Tight header rail so the logo and controls sit close to the edges. */}
-      <div className="mx-auto flex h-16 w-full max-w-[968px] items-center gap-1 px-1.5">
+      {/** Compact header rail with approximately half the previous spacing. */}
+      <div className="mx-auto flex h-16 w-full max-w-[968px] items-center gap-0.5 px-0.5">
         <MainMenu />
         <Link
           to="/"
@@ -50,13 +50,13 @@ export function SiteHeader() {
             <>
               <Link
                 to="/auth"
-                className="ml-1 rounded-md px-2 py-1 text-xs font-semibold text-surface-foreground/90 transition-colors hover:text-surface-foreground"
+                className="ml-0.5 rounded-md px-1 py-0.5 text-xs font-semibold text-surface-foreground/90 transition-colors hover:text-surface-foreground"
               >
                 Log in
               </Link>
               <Link
                 to="/auth"
-                className="rounded-md bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground"
+                className="rounded-md bg-accent px-1.5 py-0.5 text-xs font-bold text-accent-foreground"
               >
                 Join now
               </Link>
@@ -65,7 +65,7 @@ export function SiteHeader() {
             /* ── Logged in, empty wallet: push a deposit instead of USh 0 ── */
             <Link
               to="/deposit"
-              className="ml-1 rounded-md bg-accent px-2.5 py-1 text-xs font-bold text-accent-foreground"
+              className="ml-0.5 rounded-md bg-accent px-1.5 py-0.5 text-xs font-bold text-accent-foreground"
             >
               Deposit
             </Link>
@@ -73,7 +73,7 @@ export function SiteHeader() {
             /* ── Logged in with funds: authoritative ledger balance ──────── */
             <Link
               to="/deposit"
-              className="ml-1 flex items-center gap-1.5 rounded-md bg-surface-foreground/10 px-1.5 py-1"
+              className="ml-0.5 flex items-center gap-1 rounded-md bg-surface-foreground/10 px-1 py-0.5"
             >
               <Wallet className="h-4 w-4 text-accent" />
               <span className="text-xs font-semibold tabular-nums">{display}</span>
