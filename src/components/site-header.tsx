@@ -32,8 +32,8 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 brand-gradient text-surface-foreground">
-      {/** Compact header rail with approximately half the previous spacing. */}
-      <div className="mx-auto flex h-16 w-full max-w-[968px] items-center gap-0.5 px-0.5">
+      {/** Forty-pixel header rail, reduced by roughly 40% from the original height. */}
+      <div className="mx-auto flex h-10 w-full max-w-[968px] items-center gap-0.5 px-0.5">
         <MainMenu />
         <Link
           to="/"
