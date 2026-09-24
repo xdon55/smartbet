@@ -257,7 +257,7 @@ function HomePage() {
         <div className="space-y-3">
           <SectionHead title="Top leagues" icon={Trophy} to="/sports" />
           {/** Keep every league on one scrollbar-free horizontal rail at all widths. */}
-          <div className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-3 md:px-0">
+          <div className="no-scrollbar flex w-full min-w-0 flex-nowrap gap-2 overflow-x-auto overscroll-x-contain px-3 touch-pan-x md:px-0">
             {topLeagues.map((l) => (
               <Link
                 key={l.name}
