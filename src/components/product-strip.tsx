@@ -24,7 +24,7 @@ export function ProductStrip() {
   return (
     <>
       {/** Align the product rail directly beneath the compact 40px site header. */}
-      <div className="no-scrollbar fixed inset-x-0 top-10 z-30 overflow-x-auto border-b border-border bg-card">
+      <div className="no-scrollbar fixed inset-x-0 top-[40px] z-30 overflow-x-auto border-b border-border bg-card">
         <div className="mx-auto flex w-full max-w-[968px] gap-1 px-3 py-2.5">
           {products.map((p) =>
             p.to ? (
